@@ -18,6 +18,7 @@ import {
   type SlotUsage,
 } from '@/lib/orders'
 import type { Order, PickupSlot } from '@/payload-types'
+import { sendOrderConfirmation } from '@/services/notifications'
 
 /** Durée pendant laquelle une commande en attente de paiement réserve sa place (minimum Stripe Checkout). */
 export const PAYMENT_WINDOW_MINUTES = 30
@@ -297,6 +298,8 @@ export async function confirmOrderPayment(
       }
     }
     await commitTransaction(req)
+    // Après validation de la transaction : pas d'e-mail pour un paiement annulé par rollback.
+    if (result.outcome === 'paid') await sendOrderConfirmation(payload, result.order.id)
     return result
   } catch (error) {
     await killTransaction(req)

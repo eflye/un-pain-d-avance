@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { fr } from '@payloadcms/translations/languages/fr'
 import path from 'path'
@@ -41,6 +42,21 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
+  // SMTP si configuré (Mailpit en dev, prestataire en production) ; sinon e-mails écrits dans les logs.
+  email: process.env.SMTP_HOST
+    ? nodemailerAdapter({
+        defaultFromAddress: process.env.EMAIL_FROM || 'commandes@example.fr',
+        defaultFromName: process.env.EMAIL_FROM_NAME || "Un pain d'avance",
+        transportOptions: {
+          host: process.env.SMTP_HOST,
+          port: Number(process.env.SMTP_PORT || 587),
+          secure: process.env.SMTP_SECURE === 'true',
+          auth: process.env.SMTP_USER
+            ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
+            : undefined,
+        },
+      })
+    : undefined,
   sharp,
   plugins: [],
 })
