@@ -11,6 +11,7 @@
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "seed:demo": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed-demo.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "npm run test:int && npm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
@@ -18,6 +19,7 @@
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.90.2",
+    "@payloadcms/email-nodemailer": "3.90.2",
     "@payloadcms/next": "3.90.2",
     "@payloadcms/richtext-lexical": "3.90.2",
     "@payloadcms/translations": "3.90.2",
@@ -25,6 +27,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
     "graphql": "^16.8.1",
+    "lucide-react": "^1.48.0",
     "next": "16.3.3",
     "payload": "3.90.2",
     "react": "19.2.6",
@@ -33,6 +36,7 @@
     "stripe": "^22.6.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "1.58.2",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/react": "16.3.0",

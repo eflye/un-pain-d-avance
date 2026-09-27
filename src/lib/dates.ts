@@ -96,3 +96,26 @@ const longDateFormatter = new Intl.DateTimeFormat('fr-FR', {
 export function formatDateKey(key: string): string {
   return longDateFormatter.format(new Date(dateKeyToStorage(key)))
 }
+
+const shopDateTimeFormatter = new Intl.DateTimeFormat('fr-FR', {
+  timeZone: SHOP_TIME_ZONE,
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  hour: '2-digit',
+  minute: '2-digit',
+})
+
+/** « vendredi 2 octobre à 18:00 » (heure de Paris). */
+export function formatShopDateTime(input: Date | string): string {
+  const parts = Object.fromEntries(
+    shopDateTimeFormatter.formatToParts(new Date(input)).map((p) => [p.type, p.value]),
+  )
+  return `${parts.weekday} ${parts.day} ${parts.month} à ${parts.hour}:${parts.minute}`
+}
+
+/** « 09:30 » → « 9 h 30 », « 10:00 » → « 10 h » */
+export function formatTime(time: string): string {
+  const [h, m] = time.split(':')
+  return m === '00' ? `${Number(h)} h` : `${Number(h)} h ${m}`
+}

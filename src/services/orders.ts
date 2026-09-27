@@ -45,9 +45,14 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const PHONE_PATTERN = /^\+?[\d\s.-]{10,20}$/
 const MAX_CART_ENTRIES = 50
 
-/** Valide une saisie client non fiable. Renvoie l'entrée normalisée ou la liste des erreurs. */
-export function parseNewOrderInput(raw: unknown): NewOrderInput | string[] {
-  if (!raw || typeof raw !== 'object') return ['Requête invalide.']
+export type OrderInputField =
+  'pickupSlot' | 'firstName' | 'lastName' | 'email' | 'phone' | 'termsAccepted' | 'items'
+
+export type OrderInputError = { field: OrderInputField; message: string }
+
+/** Valide une saisie client non fiable. Renvoie l'entrée normalisée ou les erreurs par champ. */
+export function parseNewOrderInput(raw: unknown): NewOrderInput | OrderInputError[] {
+  if (!raw || typeof raw !== 'object') return [{ field: 'items', message: 'Requête invalide.' }]
   const body = raw as Record<string, unknown>
   const customer = (body.customer ?? {}) as Record<string, unknown>
   const text = (value: unknown, max: number) =>
@@ -63,16 +68,22 @@ export function parseNewOrderInput(raw: unknown): NewOrderInput | string[] {
   const pickupSlot = Number(body.pickupSlot)
   const rawItems = Array.isArray(body.items) ? body.items : []
 
-  const errors: string[] = []
-  if (!Number.isInteger(pickupSlot) || pickupSlot <= 0) errors.push('Choisissez un passage.')
-  if (!firstName) errors.push('Le prénom est obligatoire.')
-  if (!lastName) errors.push('Le nom est obligatoire.')
-  if (!EMAIL_PATTERN.test(email)) errors.push('L’adresse e-mail est invalide.')
-  if (!PHONE_PATTERN.test(phone)) errors.push('Le numéro de téléphone est invalide.')
-  if (body.termsAccepted !== true)
-    errors.push('Vous devez accepter les conditions générales de vente.')
-  if (rawItems.length === 0) errors.push('Le panier est vide.')
-  if (rawItems.length > MAX_CART_ENTRIES) errors.push('Le panier contient trop d’articles.')
+  const errors: OrderInputError[] = []
+  const fail = (field: OrderInputField, message: string) => errors.push({ field, message })
+  if (!Number.isInteger(pickupSlot) || pickupSlot <= 0) fail('pickupSlot', 'Choisissez un passage.')
+  if (!firstName) fail('firstName', 'Indiquez votre prénom.')
+  if (!lastName) fail('lastName', 'Indiquez votre nom.')
+  if (!EMAIL_PATTERN.test(email)) {
+    fail('email', 'Indiquez une adresse e-mail valide, par exemple marie.dupont@exemple.fr.')
+  }
+  if (!PHONE_PATTERN.test(phone)) {
+    fail('phone', 'Indiquez un numéro de téléphone à 10 chiffres, par exemple 06 12 34 56 78.')
+  }
+  if (body.termsAccepted !== true) {
+    fail('termsAccepted', 'Cochez la case pour accepter les conditions générales de vente.')
+  }
+  if (rawItems.length === 0) fail('items', 'Votre panier est vide.')
+  if (rawItems.length > MAX_CART_ENTRIES) fail('items', 'Le panier contient trop d’articles.')
   if (errors.length) return errors
 
   const items = rawItems.map((item) => {

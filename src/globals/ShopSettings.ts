@@ -18,7 +18,7 @@ export const ShopSettings: GlobalConfig = {
       type: 'text',
       label: 'Nom de la boutique',
       required: true,
-      defaultValue: "Un pain d'avance",
+      defaultValue: 'La Mie Deininge',
     },
     {
       type: 'row',

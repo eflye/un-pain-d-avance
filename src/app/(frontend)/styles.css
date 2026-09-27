@@ -1,1 +1,160 @@
 @import 'tailwindcss';
+
+/*
+ * Site client : standard soigné de la vente en ligne, aux couleurs de la devanture
+ * (docs/brand/devanture.jpg) : vert d'eau de la boiserie, lettrage gris-bleu ardoise,
+ * ferronnerie vert sombre. Lisible par tous : contrastes vérifiés AA
+ * (blanc sur vert 7.8:1, ardoise sur vert d'eau 5.4:1, muted sur fond 7:1).
+ */
+@theme {
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  /* Lettrage d'enseigne : titres et marque uniquement. */
+  --font-display: var(--font-marcellus), ui-serif, Georgia, serif;
+
+  --color-ink: #1c1917;
+  --color-muted: #57534e;
+  --color-line: #e2e0da;
+  --color-surface: #f6f5f2;
+  /* Devanture */
+  --color-shopfront: #a9d4c4;
+  --color-shopfront-soft: #e8f3ee;
+  --color-lettering: #3d4d58;
+  /* Ferronnerie : actions, sélection, focus */
+  --color-accent: #2f5a48;
+  --color-accent-strong: #234436;
+  --color-accent-soft: #e8f3ee;
+  --color-success: #166534;
+  --color-success-soft: #f0fdf4;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-warning: #92400e;
+  --color-warning-soft: #fffbeb;
+
+  --radius-control: 0.75rem;
+}
+
+@layer base {
+  html {
+    /* 18 px de base : public âgé, lecture sur téléphone en plein jour. */
+    font-size: 112.5%;
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    accent-color: var(--color-accent);
+    caret-color: var(--color-accent);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  /* Titres de page dans le lettrage de l'enseigne (Marcellus n'a qu'une graisse). */
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--color-lettering);
+    letter-spacing: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Bouton principal : pleine largeur sur téléphone, cible ≥ 56 px. */
+  .btn-primary {
+    display: inline-flex;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-control);
+    background: var(--color-accent);
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    transition:
+      background-color 150ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-primary:hover {
+    background: var(--color-accent-strong);
+  }
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+  .btn-primary:disabled,
+  .btn-primary[aria-disabled='true'] {
+    background: var(--color-line);
+    color: var(--color-muted);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-control);
+    border: 2px solid var(--color-ink);
+    background: #fff;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .btn-secondary:hover {
+    background: var(--color-surface);
+  }
+
+  .field-input {
+    width: 100%;
+    min-height: 3.25rem;
+    border-radius: var(--radius-control);
+    border: 2px solid #78716c; /* 4.8:1, bordure de contrôle ≥ 3:1 */
+    background: #fff;
+    padding: 0.625rem 0.875rem;
+    color: var(--color-ink);
+  }
+  .field-input:focus-visible {
+    border-color: var(--color-accent);
+    outline-offset: 1px;
+  }
+  .field-input[aria-invalid='true'] {
+    border-color: var(--color-danger);
+  }
+}
