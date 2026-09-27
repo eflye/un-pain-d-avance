@@ -30,7 +30,7 @@ Respecte-les dans chaque évolution. Les points marqués *(à valider)* sont des
 2. **Date limite par défaut paramétrable** dans les réglages boutique (N jours avant le passage, à HH:mm, heure de Paris), pré-remplie à la création d'un passage et modifiable passage par passage.
 3. **Passages récurrents** : le back-office permet de générer en une fois les passages d'un lieu (jour de la semaine, créneau, période) ; les passages existants ne sont pas dupliqués.
 4. **Capacité optionnelle, à deux niveaux** : nombre maximal de commandes par passage et quantité maximale par produit et par passage. Sont comptées les commandes `payee`, `preparee`, `retiree`, `non_retiree` et les commandes `en_attente_paiement` **non expirées** (réservation pendant la session Stripe).
-5. **Date limite et capacité vérifiées côté serveur**, à la création de la commande **et** à la confirmation du paiement. Aucune confiance accordée au client (navigateur).
+5. **Date limite et capacité vérifiées côté serveur**, à la création de la commande (sous verrou du passage). À la confirmation du paiement, la place est garantie tant que la réservation court ; un paiement arrivé après expiration est revérifié et peut être refusé (puis remboursé). Aucune confiance accordée au client (navigateur).
 6. **Produits gérés dans le back-office** : seuls les produits actifs sont commandables. Prix saisis en euros dans l'admin, stockés en centimes. **Allergènes** renseignés et affichés avant l'achat (obligation INCO en vente à distance).
 7. **Montants recalculés côté serveur** à partir des prix en base ; le prix affiché dans le panier n'est jamais utilisé tel quel. Nom et prix unitaire sont copiés dans la commande (instantané).
 8. **Une commande n'est payée qu'à réception du webhook Stripe** `checkout.session.completed`, jamais sur la page de retour de Stripe Checkout. Le traitement du webhook est **idempotent** : seule une commande `en_attente_paiement` peut passer à `payee`.
@@ -96,6 +96,8 @@ Pour toute fonctionnalité qui touche aux données :
 - **Clés de test** (`sk_test_` / `pk_test_`) en dev ; aucune clé dans le code ni dans git.
 - Métadonnées de la Checkout Session : identifiant de commande, pour rattacher le webhook à la commande.
 - Signature de chaque webhook vérifiée (`STRIPE_WEBHOOK_SECRET`) ; en local, relais par la Stripe CLI (`podman compose --profile stripe up -d`).
+- Toute confirmation de paiement passe par `confirmOrderPayment` (`src/services/orders.ts`), quel que soit le prestataire.
+- Sans clés Stripe, `PAYMENT_PROVIDER=simulated` remplace Stripe par une page de test locale (`/paiement-simule/…`). **Jamais en production** (refusé par le code).
 
 ### 4.5 Front-end
 - Site client dans `src/app/(frontend)/`, stylé en Tailwind CSS 4. Interface et contenus en français.

@@ -215,3 +215,87 @@ export async function createPendingOrder(
     throw error
   }
 }
+
+export type PaymentConfirmation =
+  | { outcome: 'paid'; order: Order }
+  | { outcome: 'already_paid'; order: Order }
+  | { outcome: 'rejected'; order: Order; reasons: string[] }
+
+/**
+ * Confirme le paiement d'une commande (appelé par le webhook du prestataire de paiement).
+ * Idempotent : une commande déjà payée n'est pas modifiée.
+ * Tant que la réservation court, la place est garantie ; si le paiement arrive après
+ * l'expiration, date limite et capacité sont revérifiées et la commande peut être refusée
+ * (le remboursement est alors à la charge de l'appelant).
+ */
+export async function confirmOrderPayment(
+  payload: Payload,
+  orderId: number,
+  options: { now?: Date; paymentIntentId?: string } = {},
+): Promise<PaymentConfirmation> {
+  const now = options.now ?? new Date()
+  const req = await createLocalReq({}, payload)
+  await initTransaction(req)
+  try {
+    const current = await payload.findByID({ collection: 'orders', id: orderId, depth: 0, req })
+    const slotId =
+      typeof current.pickupSlot === 'object' ? current.pickupSlot.id : current.pickupSlot
+    await lockPickupSlot(req, slotId)
+    // Relecture sous verrou : un autre traitement du même événement a pu passer entre-temps.
+    const order = await payload.findByID({ collection: 'orders', id: orderId, depth: 0, req })
+
+    let result: PaymentConfirmation
+    if (order.status !== 'en_attente_paiement') {
+      result =
+        order.status === 'annulee' || order.status === 'remboursee'
+          ? { outcome: 'rejected', order, reasons: ['Cette commande a été annulée.'] }
+          : { outcome: 'already_paid', order }
+    } else {
+      const reservationValid =
+        !!order.expiresAt && new Date(order.expiresAt).getTime() > now.getTime()
+      let refusals: string[] = []
+      if (!reservationValid) {
+        const slot = await payload.findByID({
+          collection: 'pickup-slots',
+          id: slotId,
+          depth: 1,
+          req,
+        })
+        const usage = await getSlotUsage(payload, slotId, now, { req, excludeOrderId: order.id })
+        const lines = order.items.map((item) => ({
+          product: typeof item.product === 'object' ? (item.product?.id ?? 0) : (item.product ?? 0),
+          productName: item.productName,
+          quantity: item.quantity,
+        }))
+        refusals = checkSlotAvailability(toSlotRules(slot), usage, lines, now)
+      }
+      if (refusals.length) {
+        result = { outcome: 'rejected', order, reasons: refusals }
+      } else {
+        const paid = await payload.update({
+          collection: 'orders',
+          id: order.id,
+          data: {
+            status: 'payee',
+            paidAt: now.toISOString(),
+            ...(options.paymentIntentId ? { stripePaymentIntentId: options.paymentIntentId } : {}),
+          },
+          req,
+        })
+        result = { outcome: 'paid', order: paid }
+      }
+    }
+    await commitTransaction(req)
+    return result
+  } catch (error) {
+    await killTransaction(req)
+    throw error
+  }
+}
+
+/** Annule une commande abandonnée avant paiement. Sans effet si elle n'est plus en attente. */
+export async function cancelPendingOrder(payload: Payload, orderId: number): Promise<Order> {
+  const order = await payload.findByID({ collection: 'orders', id: orderId, depth: 0 })
+  if (order.status !== 'en_attente_paiement') return order
+  return payload.update({ collection: 'orders', id: orderId, data: { status: 'annulee' } })
+}
