@@ -8,13 +8,13 @@ Lis ce fichier en entier avant toute modification.
 ## 1. Contexte du projet
 
 Application web de **précommande de boulangerie** (au sens large : pains, viennoiseries, pâtisseries…) avec paiement en ligne.
-Le client compose sa commande, choisit un **jour de livraison** parmi ceux ouverts par la boulangerie, puis paie par carte via Stripe.
+Le boulanger fait une **tournée** dans des villages sans boulangerie. L'application centralise et encaisse les commandes à l'avance : le client choisit un **passage** (un lieu, une date, un créneau), compose sa commande, paie par carte via Stripe, puis **retire** sa commande sur place lors du passage. Il n'y a **pas de livraison à domicile**.
 
 **Utilisateurs :**
-- **Clients** : front-office public, commande **sans création de compte** (nom, e-mail, téléphone).
-- **Boulanger / gestionnaire** : back-office Payload (`/admin`) pour gérer les produits en vente, les jours de livraison et le suivi des commandes.
+- **Clients** : front-office public, commande **sans création de compte** (prénom, nom, e-mail, téléphone).
+- **Boulanger / gestionnaire** : back-office Payload (`/admin`) pour gérer les produits en vente, les lieux de retrait, les passages et le suivi des commandes.
 
-**Périmètre :** catalogue, panier, choix du jour de livraison, paiement, back-office produits / jours de livraison / commandes, e-mails de confirmation. **Le périmètre ne s'élargira pas beaucoup** : toute fonctionnalité hors de cette liste doit être signalée comme hors périmètre avant d'être envisagée.
+**Périmètre :** catalogue, panier, choix du passage, paiement, back-office produits / lieux / passages / commandes, e-mails de confirmation. **Le périmètre ne s'élargira pas beaucoup** : toute fonctionnalité hors de cette liste doit être signalée comme hors périmètre avant d'être envisagée.
 
 **Stack :** Next.js 16 (App Router) + Payload CMS 3 + PostgreSQL 17 + Stripe Checkout + Tailwind CSS 4, en TypeScript. Tout tourne dans des containers **Podman**.
 
@@ -26,14 +26,17 @@ Le client compose sa commande, choisit un **jour de livraison** parmi ceux ouver
 
 Respecte-les dans chaque évolution. Les points marqués *(à valider)* sont des recommandations techniques pas encore confirmées par le client : ne les considère pas comme acquis si une demande les contredit.
 
-1. **Jours de livraison gérés dans le back-office** : seuls les jours explicitement ouverts sont proposés au client. Chaque jour porte une date, une **date limite de commande**, une capacité éventuelle et un état ouvert / fermé.
-2. **Date limite et capacité vérifiées côté serveur**, à la création de la commande **et** à la confirmation du paiement. Aucune confiance accordée au client (navigateur).
-3. **Produits gérés dans le back-office** : seuls les produits actifs sont commandables. Un produit peut être indisponible certains jours ou limité en quantité par jour *(à valider)*.
-4. **Montants recalculés côté serveur** à partir des prix en base ; le prix affiché dans le panier n'est jamais utilisé tel quel.
-5. **Une commande n'est payée qu'à réception du webhook Stripe** `checkout.session.completed`, jamais sur la page de retour de Stripe Checkout. Le traitement du webhook est **idempotent** (un même événement reçu deux fois ne produit aucun effet supplémentaire).
-6. **Encaissement immédiat à la commande** *(à valider)* : pas de pré-autorisation (elle expire après environ 7 jours chez Stripe). Une annulation donne lieu à un remboursement Stripe.
-7. **Cycle de vie d'une commande** : `en_attente_paiement` → `payee` → `preparee` → `livree`, plus `annulee` / `remboursee`. Les transitions sont contrôlées côté serveur.
-8. **Denrées périssables** : le droit de rétractation ne s'applique pas ; les CGV doivent le mentionner.
+1. **Lieux et passages gérés dans le back-office** : un passage est un couple **lieu + date** (unique) avec un créneau horaire, une **date limite de commande**, un état ouvert / fermé et des limites de capacité optionnelles. Seuls les passages ouverts dont la date limite n'est pas dépassée sont proposés au client. Plusieurs lieux peuvent avoir un passage le même jour.
+2. **Date limite par défaut paramétrable** dans les réglages boutique (N jours avant le passage, à HH:mm, heure de Paris), pré-remplie à la création d'un passage et modifiable passage par passage.
+3. **Passages récurrents** : le back-office permet de générer en une fois les passages d'un lieu (jour de la semaine, créneau, période) ; les passages existants ne sont pas dupliqués.
+4. **Capacité optionnelle, à deux niveaux** : nombre maximal de commandes par passage et quantité maximale par produit et par passage. Sont comptées les commandes `payee`, `preparee`, `retiree`, `non_retiree` et les commandes `en_attente_paiement` **non expirées** (réservation pendant la session Stripe).
+5. **Date limite et capacité vérifiées côté serveur**, à la création de la commande **et** à la confirmation du paiement. Aucune confiance accordée au client (navigateur).
+6. **Produits gérés dans le back-office** : seuls les produits actifs sont commandables. Prix saisis en euros dans l'admin, stockés en centimes. **Allergènes** renseignés et affichés avant l'achat (obligation INCO en vente à distance).
+7. **Montants recalculés côté serveur** à partir des prix en base ; le prix affiché dans le panier n'est jamais utilisé tel quel. Nom et prix unitaire sont copiés dans la commande (instantané).
+8. **Une commande n'est payée qu'à réception du webhook Stripe** `checkout.session.completed`, jamais sur la page de retour de Stripe Checkout. Le traitement du webhook est **idempotent** : seule une commande `en_attente_paiement` peut passer à `payee`.
+9. **Encaissement immédiat à la commande** : pas de pré-autorisation (elle expire après environ 7 jours chez Stripe). Une annulation donne lieu à un remboursement Stripe.
+10. **Cycle de vie d'une commande** : `en_attente_paiement` → `payee` → `preparee` → `retiree`, plus `non_retiree` (client absent, sans remboursement automatique), `annulee` et `remboursee`. Les transitions sont contrôlées côté serveur.
+11. **Denrées périssables** : le droit de rétractation ne s'applique pas ; les CGV doivent le mentionner.
 
 ---
 
@@ -54,7 +57,7 @@ Pour toute fonctionnalité qui touche aux données :
 - Un commit = une unité cohérente (schéma, logique métier, back-office, front client, paiement, tests, docs).
 - Chaque commit laisse l'application fonctionnelle et les tests au vert.
 - Messages au format Conventional Commits, en français :
-  `feat(commandes): refuser une commande après la date limite du jour de livraison`
+  `feat(commandes): refuser une commande après la date limite du passage`
   Types : `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `a11y`.
 
 ### 3.4 Versions
@@ -71,11 +74,11 @@ Pour toute fonctionnalité qui touche aux données :
 - Postgres : service `postgres` dans le réseau compose, `localhost:5435` depuis l'hôte.
 
 ### 4.2 Données (Payload / PostgreSQL)
-- Collections dans `src/collections/`, une par fichier. Slugs en anglais et en kebab-case (`products`, `delivery-days`, `orders`), **libellés et contenus admin en français**.
+- Collections dans `src/collections/`, une par fichier ; globals dans `src/globals/`. Slugs en anglais et en kebab-case (`categories`, `products`, `locations`, `pickup-slots`, `orders`), **libellés et contenus admin en français**.
 - Après toute modification d'une collection ou d'un champ : `npm run generate:types`, et commit de `src/payload-types.ts`.
 - Montants stockés en **centimes** (entier), cohérent avec Stripe. Jamais de flottants pour de l'argent.
-- Un jour de livraison est une **date civile** (`Europe/Paris`) : pas de conversion de fuseau implicite qui pourrait décaler le jour. Horodatages techniques en UTC, affichés en `Europe/Paris`.
-- Règles d'accès (`access`) explicites sur chaque collection : lecture publique limitée aux produits actifs et aux jours ouverts ; commandes et clients accessibles au seul back-office.
+- La date d'un passage est une **date civile** (`Europe/Paris`), stockée à midi UTC : pas de conversion de fuseau implicite qui pourrait décaler le jour. Créneaux en `HH:mm`. Horodatages techniques en UTC, affichés en `Europe/Paris`.
+- Règles d'accès (`access`) explicites sur chaque collection : lecture publique limitée aux produits actifs, lieux actifs et passages ouverts ; commandes accessibles au seul back-office.
 - Opérations multi-documents (commande + décrément de stock) dans une **transaction** (`req` transmis à l'API locale).
 - Avant la mise en production : passage aux migrations (`npm run payload migrate:create`).
 
@@ -95,7 +98,7 @@ Pour toute fonctionnalité qui touche aux données :
 ### 4.5 Front-end
 - Site client dans `src/app/(frontend)/`, stylé en Tailwind CSS 4. Interface et contenus en français.
 - **Mobile d'abord** : la majorité des commandes se fera sur téléphone.
-- Server Components par défaut ; `'use client'` seulement là où l'interactivité l'exige (panier, sélection du jour).
+- Server Components par défaut ; `'use client'` seulement là où l'interactivité l'exige (panier, sélection du passage).
 
 ---
 
@@ -106,8 +109,8 @@ Chaque écran client créé ou modifié respecte le **RGAA 4.1 / WCAG 2.1 niveau
 - Formulaires : chaque champ a un `<label>` associé ; erreurs annoncées (`aria-live` / `aria-describedby`) et reliées au champ.
 - Navigation complète au clavier, ordre de focus logique, focus visible.
 - Contrastes AA minimum (4,5:1 texte courant, 3:1 éléments d'interface).
-- Information transmise par le texte en plus de la couleur (disponibilité des jours de livraison, stock notamment).
-- Composants interactifs custom (sélecteur de jour, quantités) : rôles et états ARIA corrects.
+- Information transmise par le texte en plus de la couleur (disponibilité des passages, stock notamment).
+- Composants interactifs custom (sélecteur de passage, quantités) : rôles et états ARIA corrects.
 - Vérification automatisée via `@axe-core/playwright` dans les tests de chaque écran touché.
 
 ---
@@ -115,7 +118,7 @@ Chaque écran client créé ou modifié respecte le **RGAA 4.1 / WCAG 2.1 niveau
 ## 6. Tests
 
 - **Vitest** (`tests/int/`) pour la logique métier : calcul des montants, date limite, capacité, transitions de statut, idempotence du webhook.
-- **Playwright** (`tests/e2e/`) accompagne chaque fonctionnalité : parcours nominal, cas d'erreur (jour complet, date limite dépassée, produit désactivé) et **contrôle des droits** (un visiteur tente de lire les commandes ou d'accéder à l'admin → refus attendu).
+- **Playwright** (`tests/e2e/`) accompagne chaque fonctionnalité : parcours nominal, cas d'erreur (passage complet, plafond produit atteint, date limite dépassée, produit désactivé) et **contrôle des droits** (un visiteur tente de lire les commandes ou d'accéder à l'admin → refus attendu).
 - Un test d'accessibilité axe par écran client modifié.
 - Données de test créées et nettoyées par les tests eux-mêmes (fixtures dédiées).
 - Lance la suite complète avant de proposer un commit.
@@ -124,7 +127,7 @@ Chaque écran client créé ou modifié respecte le **RGAA 4.1 / WCAG 2.1 niveau
 
 ## 7. Données personnelles et sécurité
 
-- Collecte minimale : nom, e-mail, téléphone et adresse de livraison si nécessaire, rien de plus.
+- Collecte minimale : prénom, nom, e-mail, téléphone, rien de plus (pas d'adresse : retrait uniquement).
 - Toute donnée personnelle est couverte par une **durée de conservation** définie et une procédure de purge / export (RGPD) *(à mettre en place)*.
 - Journaux et messages d'erreur exempts de données personnelles et de secrets.
 - Back-office protégé par l'authentification Payload ; rôles limités au strict nécessaire.
@@ -135,7 +138,7 @@ Chaque écran client créé ou modifié respecte le **RGAA 4.1 / WCAG 2.1 niveau
 ## 8. E-mails
 
 - Adaptateur e-mail Payload *(à configurer : Resend ou Brevo)* ; en dev, les e-mails sont écrits dans les logs du container.
-- Notifications prévues : confirmation de commande payée, rappel avant livraison *(à valider)*, annulation / remboursement.
+- Notifications prévues : confirmation de commande payée (avec lieu, adresse, date et créneau de retrait), rappel avant le passage *(à valider)*, annulation / remboursement.
 - Contenus en français, sans données sensibles inutiles.
 
 ---
@@ -186,10 +189,14 @@ Une tâche est terminée quand :
 
 | Terme | Sens |
 |---|---|
-| Précommande | Commande passée et payée à l'avance pour un jour de livraison futur |
-| Jour de livraison | Date ouverte par la boulangerie dans le back-office, sur laquelle le client cale sa commande |
-| Date limite de commande | Instant au-delà duquel un jour de livraison n'accepte plus de commande |
-| Capacité | Nombre maximal de commandes (ou d'unités d'un produit) acceptées pour un jour donné |
+| Précommande | Commande passée et payée à l'avance, retirée lors d'un passage |
+| Tournée | Déplacement du boulanger dans des villages sans boulangerie |
+| Lieu de retrait | Village et emplacement où le boulanger s'arrête (ex. place de l'église) |
+| Passage | Arrêt du boulanger dans un lieu, à une date et un créneau donnés ; le client choisit un passage |
+| Retrait | Remise de la commande au client lors du passage |
+| Date limite de commande | Instant au-delà duquel un passage n'accepte plus de commande |
+| Capacité | Nombre maximal de commandes, ou d'unités d'un produit, acceptées pour un passage |
+| Réglages boutique | Global Payload : nom, contact, CGV, date limite par défaut |
 | Back-office | Interface d'administration Payload (`/admin`) |
 | Checkout Session | Session de paiement hébergée par Stripe, créée par l'app pour une commande |
 | Webhook | Notification serveur-à-serveur de Stripe confirmant un paiement |
