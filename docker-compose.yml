@@ -1,0 +1,75 @@
+# ============================================
+# Compose (Podman) - Un pain d'avance
+# ============================================
+# Démarrage :  podman compose up -d
+# Stripe CLI : podman compose --profile stripe up -d
+# ⚠️  Copier .env.example vers .env avant le premier lancement
+
+services:
+  postgres:
+    image: docker.io/library/postgres:17-alpine
+    container_name: painavance-postgres
+    environment:
+      POSTGRES_DB: painavance
+      POSTGRES_USER: painavance
+      POSTGRES_PASSWORD: painavance
+    ports:
+      - "5435:5432" # Port externe:interne (localhost:5435)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - painavance-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U painavance -d painavance"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: docker.io/library/node:22-alpine
+    container_name: painavance-app
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      # ⚠️ Nom du service "postgres" (communication inter-conteneurs)
+      DATABASE_URL: postgresql://painavance:painavance@postgres:5432/painavance
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Hot reload fiable sur un volume monté depuis macOS
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - app_node_modules:/app/node_modules
+      - app_next:/app/.next
+    networks:
+      - painavance-network
+    command: sh -c "apk add --no-cache libc6-compat && npm install && npm run dev"
+
+  # Relaie les webhooks Stripe (mode test) vers l'app : podman compose --profile stripe up -d
+  # Le secret de signature s'affiche dans : podman compose logs stripe → copier dans STRIPE_WEBHOOK_SECRET
+  stripe:
+    image: docker.io/stripe/stripe-cli:latest
+    container_name: painavance-stripe
+    profiles: ["stripe"]
+    env_file:
+      - .env
+    command: listen --api-key ${STRIPE_SECRET_KEY} --forward-to app:3000/api/stripe/webhook
+    depends_on:
+      - app
+    networks:
+      - painavance-network
+
+volumes:
+  postgres_data:
+  app_node_modules:
+  app_next:
+
+networks:
+  painavance-network:
+    driver: bridge
