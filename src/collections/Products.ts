@@ -3,7 +3,7 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '@/access'
 import { ALLERGENS } from '@/fields/allergens'
-import { slugify } from '@/lib/slug'
+import { slugField } from '@/fields/slug'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -48,23 +48,7 @@ export const Products: CollectionConfig = {
       label: 'Nom',
       required: true,
     },
-    {
-      name: 'slug',
-      type: 'text',
-      label: 'Identifiant d’URL',
-      unique: true,
-      index: true,
-      admin: {
-        position: 'sidebar',
-        description: 'Généré depuis le nom à la création, puis stable.',
-      },
-      hooks: {
-        // beforeValidate : le slug doit exister avant la validation de l'unicité.
-        beforeValidate: [
-          ({ value, data }) => value || (data?.name ? slugify(String(data.name)) : value),
-        ],
-      },
-    },
+    slugField('name', 'Généré depuis le nom à la création, puis stable.'),
     {
       name: 'category',
       type: 'relationship',

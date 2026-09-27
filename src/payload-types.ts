@@ -226,6 +226,10 @@ export interface Location {
    */
   name: string;
   /**
+   * Adresse de la page du village (ex. /village/montgeroult), à utiliser dans les QR codes. Générée à la création, puis stable.
+   */
+  slug?: string | null;
+  /**
    * Ex. « Place de l’église, 95650 Montgeroult ».
    */
   address: string;
@@ -509,6 +513,7 @@ export interface PickupSlotsSelect<T extends boolean = true> {
 export interface LocationsSelect<T extends boolean = true> {
   _order?: T;
   name?: T;
+  slug?: T;
   address?: T;
   directions?: T;
   active?: T;

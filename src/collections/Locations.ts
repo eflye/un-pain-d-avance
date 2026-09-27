@@ -2,6 +2,7 @@ import { APIError } from 'payload'
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '@/access'
+import { slugField } from '@/fields/slug'
 
 export const Locations: CollectionConfig = {
   slug: 'locations',
@@ -47,6 +48,10 @@ export const Locations: CollectionConfig = {
       unique: true,
       admin: { description: 'Nom affiché au client, en général le village (ex. « Montgeroult »).' },
     },
+    slugField(
+      'name',
+      'Adresse de la page du village (ex. /village/montgeroult), à utiliser dans les QR codes. Générée à la création, puis stable.',
+    ),
     {
       name: 'address',
       type: 'text',
