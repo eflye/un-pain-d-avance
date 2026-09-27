@@ -76,6 +76,8 @@ Pour toute fonctionnalité qui touche aux données :
 ### 4.2 Données (Payload / PostgreSQL)
 - Collections dans `src/collections/`, une par fichier ; globals dans `src/globals/`. Slugs en anglais et en kebab-case (`categories`, `products`, `locations`, `pickup-slots`, `orders`), **libellés et contenus admin en français**.
 - Après toute modification d'une collection ou d'un champ : `npm run generate:types`, et commit de `src/payload-types.ts`.
+- Après tout ajout ou modification d'un composant admin (`admin.components`) ou d'un champ `richText` : `npm run generate:importmap`, vérifier que `src/app/(payload)/admin/importMap.js` référence bien les nouveaux composants, et le committer avec le changement. Une import map périmée casse l'admin sans erreur de build.
+- Après ajout de fichiers dans `src/`, si le serveur de dev signale « Module not found » : `podman compose restart app` (cache Turbopack sur le volume monté).
 - Montants stockés en **centimes** (entier), cohérent avec Stripe. Jamais de flottants pour de l'argent.
 - La date d'un passage est une **date civile** (`Europe/Paris`), stockée à midi UTC : pas de conversion de fuseau implicite qui pourrait décaler le jour. Créneaux en `HH:mm`. Horodatages techniques en UTC, affichés en `Europe/Paris`.
 - Règles d'accès (`access`) explicites sur chaque collection : lecture publique limitée aux produits actifs, lieux actifs et passages ouverts ; commandes accessibles au seul back-office.
@@ -179,7 +181,7 @@ Une tâche est terminée quand :
 - [ ] les écrans touchés passent les contrôles RGAA et axe ;
 - [ ] les tests couvrent le nominal, les erreurs et les droits, et passent ;
 - [ ] `tsc --noEmit` et le lint sont au vert ;
-- [ ] les types Payload sont régénérés si le schéma a changé ;
+- [ ] les types Payload et l'import map sont régénérés si le schéma ou les composants admin ont changé ;
 - [ ] les commits sont atomiques et bien nommés ;
 - [ ] un compte rendu final liste : ce qui a été fait, les choix techniques, les points à vérifier manuellement, les pistes.
 
