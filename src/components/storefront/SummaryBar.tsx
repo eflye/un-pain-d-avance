@@ -16,10 +16,10 @@ export function SummaryBar({ children }: { children: React.ReactNode }) {
         <p className="flex flex-1 items-center gap-2" aria-live="polite">
           <ShoppingBasket aria-hidden="true" className="size-6 shrink-0 text-accent" />
           <span>
-            <span className="block text-sm text-muted">
+            <span className="block text-muted">
               {itemCount === 0 ? 'Panier vide' : `${itemCount} article${itemCount > 1 ? 's' : ''}`}
             </span>
-            <span className="block text-xl font-bold">{formatCents(totalCents)}</span>
+            <span className="block text-xl font-bold tabular-nums">{formatCents(totalCents)}</span>
           </span>
         </p>
         {children}

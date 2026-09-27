@@ -37,7 +37,7 @@ test.describe('Parcours client', () => {
     await expectAccessible(page)
 
     await page
-      .getByRole('link', { name: /commander pour ce passage/ })
+      .getByRole('link', { name: /Commander pour ce passage/ })
       .first()
       .click()
     await expect(page.getByRole('heading', { level: 1, name: 'Vos produits' })).toBeVisible()

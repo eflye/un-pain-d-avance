@@ -8,13 +8,14 @@
  */
 @theme {
   --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
-  /* Lettrage d'enseigne : titres et marque uniquement. */
-  --font-display: var(--font-marcellus), ui-serif, Georgia, serif;
+  /* Enseigne peinte en italique chancelière : titres de page uniquement. */
+  --font-display: var(--font-alegreya), ui-serif, Georgia, serif;
 
   --color-ink: #1c1917;
   --color-muted: #57534e;
   --color-line: #e2e0da;
-  --color-surface: #f6f5f2;
+  /* Fond froid tiré du vert d'eau, pas de crème. */
+  --color-surface: #f4f8f6;
   /* Devanture */
   --color-shopfront: #a9d4c4;
   --color-shopfront-soft: #e8f3ee;
@@ -47,7 +48,6 @@
   body {
     font-family: var(--font-sans);
     line-height: 1.5;
-    font-variant-numeric: tabular-nums;
   }
 
   ::selection {
@@ -73,10 +73,11 @@
     letter-spacing: -0.01em;
   }
 
-  /* Titres de page dans le lettrage de l'enseigne (Marcellus n'a qu'une graisse). */
+  /* Titres de page dans l'esprit de l'enseigne « Boulangerie · Pâtisserie ». */
   h1 {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-style: italic;
+    font-weight: 500;
     color: var(--color-lettering);
     letter-spacing: 0;
   }

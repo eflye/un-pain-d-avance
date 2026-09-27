@@ -1,4 +1,4 @@
-import { Atkinson_Hyperlegible_Next, Marcellus } from 'next/font/google'
+import { Alegreya, Atkinson_Hyperlegible_Next } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
@@ -18,11 +18,12 @@ const atkinson = Atkinson_Hyperlegible_Next({
   display: 'swap',
 })
 
-// Romain à empattements évasés, proche du lettrage peint de la devanture.
-const marcellus = Marcellus({
+// Italique calligraphique proche de l'enseigne peinte « Boulangerie · Pâtisserie ».
+const alegreya = Alegreya({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-marcellus',
+  weight: '500',
+  style: 'italic',
+  variable: '--font-alegreya',
   display: 'swap',
 })
 
@@ -38,7 +39,7 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getShopSettings(await getPayload({ config: await config }))
   return (
-    <html lang="fr" className={`${atkinson.variable} ${marcellus.variable}`}>
+    <html lang="fr" className={`${atkinson.variable} ${alegreya.variable}`}>
       <body className="flex min-h-dvh flex-col bg-surface text-ink antialiased">
         <a
           href="#contenu"
@@ -50,7 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="mx-auto max-w-2xl px-4 py-4">
             <Link href="/" className="inline-block text-lettering no-underline">
               <Image src={logo} alt="La Mie Deininge" priority className="h-9 w-auto sm:h-11" />
-              <span className="mt-1 block font-display text-base tracking-wide">
+              <span className="mt-1 block font-display text-lg text-balance italic">
                 Un pain d&apos;avance · commandez, retirez au camion
               </span>
             </Link>

@@ -93,7 +93,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
           Détail
         </h2>
         <div className="rounded-2xl border border-line bg-white p-4">
-          <table className="w-full text-left">
+          <table className="w-full text-left tabular-nums">
             <caption className="sr-only">Produits commandés</caption>
             <thead className="sr-only">
               <tr>

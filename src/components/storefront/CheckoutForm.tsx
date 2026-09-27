@@ -130,7 +130,7 @@ export function CheckoutForm({ action, productsHref }: { action: Action; product
           Votre commande
         </h2>
         <div className="rounded-2xl border border-line bg-white p-4">
-          <table className="w-full text-left">
+          <table className="w-full text-left tabular-nums">
             <caption className="sr-only">Produits commandés</caption>
             <thead className="sr-only">
               <tr>
@@ -170,7 +170,7 @@ export function CheckoutForm({ action, productsHref }: { action: Action; product
       </section>
 
       <fieldset className="space-y-5">
-        <legend className="mb-4 text-xl font-bold">Vos coordonnées</legend>
+        <legend className="mb-4 text-xl font-bold">Qui vient chercher la commande ?</legend>
         <p className="-mt-2 text-muted">Tous les champs sont obligatoires, sauf le message.</p>
         <Field
           name="firstName"

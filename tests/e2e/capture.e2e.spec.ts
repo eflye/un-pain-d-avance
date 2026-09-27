@@ -19,7 +19,7 @@ test('captures du parcours', async ({ page }, testInfo) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   await shot('village')
   await page
-    .getByRole('link', { name: /commander pour ce passage/ })
+    .getByRole('link', { name: /Commander pour ce passage/ })
     .first()
     .click()
   await expect(page.getByRole('heading', { level: 1, name: 'Vos produits' })).toBeVisible()

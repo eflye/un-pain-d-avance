@@ -64,7 +64,7 @@ export default async function VillagePage({ params }: Props) {
           {slots.map((slot) => {
             const content = (
               <>
-                <span className="flex-1">
+                <span className="block">
                   <span className="block text-xl font-bold first-letter:uppercase">
                     {formatDateKey(slot.dateKey)}
                   </span>
@@ -80,24 +80,24 @@ export default async function VillagePage({ params }: Props) {
                     <Availability slot={slot} />
                   </span>
                 </span>
-                {!slot.isFull && (
-                  <ChevronRight aria-hidden="true" className="size-6 shrink-0 text-accent" />
-                )}
               </>
             )
             return (
               <li key={slot.id}>
                 {slot.isFull ? (
-                  <div className="flex items-center gap-4 rounded-2xl border border-line bg-white p-4 text-ink opacity-80">
+                  <div className="rounded-2xl border border-line bg-white p-4 text-ink">
                     {content}
                   </div>
                 ) : (
                   <Link
                     href={`/commander/${slot.id}`}
-                    className="flex items-center gap-4 rounded-2xl border-2 border-line bg-white p-4 text-ink no-underline transition-colors hover:border-accent"
+                    className="group block rounded-2xl border-2 border-line bg-white p-4 text-ink no-underline transition-colors hover:border-accent"
                   >
                     {content}
-                    <span className="sr-only">: commander pour ce passage</span>
+                    <span className="btn-primary mt-4 w-full whitespace-nowrap group-hover:bg-accent-strong">
+                      Commander pour ce passage
+                      <ChevronRight aria-hidden="true" className="size-5" />
+                    </span>
                   </Link>
                 )}
               </li>

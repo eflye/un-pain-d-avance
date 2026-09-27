@@ -1,4 +1,5 @@
 'use client'
+import { Check } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
@@ -28,7 +29,10 @@ export function CatalogList({ sections }: { sections: CatalogSection[] }) {
               const quantity = quantities[item.id] ?? 0
               const soldOut = item.remaining === 0
               return (
-                <li key={item.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
+                <li
+                  key={item.id}
+                  className={`flex flex-col gap-3 p-4 transition-colors sm:flex-row sm:items-center ${quantity > 0 ? 'bg-accent-soft' : ''}`}
+                >
                   <div className="flex flex-1 gap-4">
                     {item.image && (
                       <Image
@@ -46,9 +50,17 @@ export function CatalogList({ sections }: { sections: CatalogSection[] }) {
                           <span className="font-normal text-muted"> · {item.unitLabel}</span>
                         )}
                       </h3>
-                      <p className="text-lg font-bold">{formatCents(item.priceCents)}</p>
+                      <p className="text-lg font-bold tabular-nums">
+                        {formatCents(item.priceCents)}
+                      </p>
                       {item.description && <p className="mt-1 text-muted">{item.description}</p>}
-                      <p className="mt-1 text-sm text-muted">{allergensText(item.allergens)}</p>
+                      <p className="mt-1 text-muted">{allergensText(item.allergens)}</p>
+                      {quantity > 0 && (
+                        <p className="mt-1 flex items-center gap-1.5 font-bold text-accent">
+                          <Check aria-hidden="true" className="size-5" strokeWidth={3} />
+                          Dans votre panier : {quantity}
+                        </p>
+                      )}
                       {soldOut ? (
                         <p className="mt-1 font-bold text-danger">Épuisé pour ce passage</p>
                       ) : (
