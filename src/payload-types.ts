@@ -67,6 +67,8 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    'pickup-slots': PickupSlot;
+    locations: Location;
     categories: Category;
     products: Product;
     media: Media;
@@ -78,6 +80,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    'pickup-slots': PickupSlotsSelect<false> | PickupSlotsSelect<true>;
+    locations: LocationsSelect<false> | LocationsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -91,8 +95,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'shop-settings': ShopSetting;
+  };
+  globalsSelect: {
+    'shop-settings': ShopSettingsSelect<false> | ShopSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -123,12 +131,70 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "pickup-slots".
  */
-export interface Category {
+export interface PickupSlot {
+  id: number;
+  title?: string | null;
+  date: string;
+  location: number | Location;
+  /**
+   * HH:mm
+   */
+  startTime: string;
+  /**
+   * HH:mm
+   */
+  endTime: string;
+  /**
+   * Laisser vide pour appliquer la règle des réglages boutique (par défaut la veille à 18:00).
+   */
+  orderDeadline?: string | null;
+  /**
+   * Optionnel. Laisser vide pour ne pas limiter.
+   */
+  maxOrders?: number | null;
+  /**
+   * Optionnel. Ex. 20 brioches au maximum pour ce passage.
+   */
+  productLimits?:
+    | {
+        product: number | Product;
+        maxQuantity: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ex. « Le camion sera exceptionnellement devant la mairie ».
+   */
+  publicNote?: string | null;
+  isOpen?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
   id: number;
   _order?: string | null;
+  /**
+   * Nom affiché au client, en général le village (ex. « Montgeroult »).
+   */
   name: string;
+  /**
+   * Ex. « Place de l’église, 95650 Montgeroult ».
+   */
+  address: string;
+  /**
+   * Précisions pour trouver le camion (optionnel).
+   */
+  directions?: string | null;
+  /**
+   * Un lieu inactif et ses passages ne sont plus proposés aux clients.
+   */
+  active?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -180,6 +246,17 @@ export interface Product {
    * Décocher pour retirer le produit de la vente sans le supprimer.
    */
   active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  _order?: string | null;
+  name: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -253,6 +330,14 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'pickup-slots';
+        value: number | PickupSlot;
+      } | null)
+    | ({
+        relationTo: 'locations';
+        value: number | Location;
+      } | null)
+    | ({
         relationTo: 'categories';
         value: number | Category;
       } | null)
@@ -309,6 +394,43 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pickup-slots_select".
+ */
+export interface PickupSlotsSelect<T extends boolean = true> {
+  title?: T;
+  date?: T;
+  location?: T;
+  startTime?: T;
+  endTime?: T;
+  orderDeadline?: T;
+  maxOrders?: T;
+  productLimits?:
+    | T
+    | {
+        product?: T;
+        maxQuantity?: T;
+        id?: T;
+      };
+  publicNote?: T;
+  isOpen?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations_select".
+ */
+export interface LocationsSelect<T extends boolean = true> {
+  _order?: T;
+  name?: T;
+  address?: T;
+  directions?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -418,6 +540,68 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shop-settings".
+ */
+export interface ShopSetting {
+  id: number;
+  shopName: string;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  /**
+   * Appliquée à chaque nouveau passage dont la date limite est laissée vide. Modifiable ensuite passage par passage.
+   */
+  defaultDeadline: {
+    /**
+     * 0 = le jour même, 1 = la veille…
+     */
+    daysBefore: number;
+    /**
+     * Format HH:mm, heure de Paris (ex. 18:00).
+     */
+    time: string;
+  };
+  /**
+   * Doivent mentionner que le droit de rétractation ne s’applique pas aux denrées périssables.
+   */
+  termsOfSale?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shop-settings_select".
+ */
+export interface ShopSettingsSelect<T extends boolean = true> {
+  shopName?: T;
+  contactEmail?: T;
+  contactPhone?: T;
+  defaultDeadline?:
+    | T
+    | {
+        daysBefore?: T;
+        time?: T;
+      };
+  termsOfSale?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

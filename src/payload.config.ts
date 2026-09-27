@@ -10,6 +10,9 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
+import { Locations } from './collections/Locations'
+import { PickupSlots } from './collections/PickupSlots'
+import { ShopSettings } from './globals/ShopSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,7 +24,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Categories, Products, Media, Users],
+  collections: [PickupSlots, Locations, Categories, Products, Media, Users],
+  globals: [ShopSettings],
   i18n: {
     supportedLanguages: { fr },
     fallbackLanguage: 'fr',
