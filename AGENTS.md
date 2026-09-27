@@ -122,7 +122,7 @@ Chaque écran client créé ou modifié respecte le **RGAA 4.1 / WCAG 2.1 niveau
 ## 6. Tests
 
 - **Vitest** (`tests/int/`) pour la logique métier : calcul des montants, date limite, capacité, transitions de statut, idempotence du webhook.
-- **Playwright** (`tests/e2e/`) accompagne chaque fonctionnalité : parcours nominal, cas d'erreur (passage complet, plafond produit atteint, date limite dépassée, produit désactivé) et **contrôle des droits** (un visiteur tente de lire les commandes ou d'accéder à l'admin → refus attendu).
+- **Playwright** (`tests/e2e/`, container `e2e` : l'image Alpine de l'app ne fait pas tourner Chromium) accompagne chaque fonctionnalité : parcours nominal, cas d'erreur (passage complet, plafond produit atteint, date limite dépassée, produit désactivé) et **contrôle des droits** (un visiteur tente de lire les commandes ou d'accéder à l'admin → refus attendu).
 - Un test d'accessibilité axe par écran client modifié.
 - Données de test créées et nettoyées par les tests eux-mêmes (fixtures dédiées).
 - Lance la suite complète avant de proposer un commit.
@@ -163,9 +163,15 @@ podman compose logs stripe            # récupérer le whsec_… pour STRIPE_WEB
 podman compose exec app npx tsc --noEmit
 podman compose exec app npm run lint
 
+# Données de démonstration (catalogue, 2 villages, passages des 4 prochaines semaines)
+podman compose exec app npm run seed:demo
+
 # Tests
 podman compose exec app npm run test:int
-podman compose exec app npm run test:e2e
+podman compose --profile e2e run --rm e2e          # Playwright + axe, mobile et bureau
+CAPTURE=1 podman compose --profile e2e run --rm e2e npx playwright test capture   # captures → .impeccable/review/
+
+# E-mails de développement : http://localhost:8026 (Mailpit)
 
 # Payload
 podman compose exec app npm run generate:types

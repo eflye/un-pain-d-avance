@@ -18,9 +18,21 @@ podman compose up -d            # Postgres + app (npm install au premier lanceme
 podman compose logs -f app
 ```
 
-- Site : http://localhost:3000
+- Site : http://localhost:3000 (ex. page d'un village : http://localhost:3000/village/montgeroult)
 - Back-office : http://localhost:3000/admin (le premier compte créé est l'admin)
+- E-mails envoyés en dev : http://localhost:8026 (Mailpit)
 - Postgres depuis l'hôte : `localhost:5435` (painavance / painavance)
+
+Données de démonstration (catalogue fictif, deux villages, passages des 4 prochaines semaines) :
+
+```bash
+podman compose exec app npm run seed:demo
+```
+
+### Paiement sans clés Stripe
+
+Avec `PAYMENT_PROVIDER=simulated` dans `.env`, le paiement Stripe est remplacé par une page de test
+locale (« Simuler un paiement réussi / un abandon »). Refusé en production.
 
 ### Stripe (mode test)
 
@@ -40,6 +52,7 @@ Toutes les commandes s'exécutent dans le container `app` :
 podman compose exec app npm run lint
 podman compose exec app npx tsc --noEmit
 podman compose exec app npm run test:int
+podman compose --profile e2e run --rm e2e       # tests de bout en bout (Playwright + axe)
 podman compose exec app npm run generate:types      # après modification d'une collection
 podman compose exec app npm run generate:importmap  # après ajout d'un composant admin custom
 podman compose exec app npm install <paquet>
@@ -50,11 +63,13 @@ podman compose exec app npm install <paquet>
 ```
 src/
 ├── app/
-│   ├── (frontend)/        # Site client (Tailwind)
+│   ├── (frontend)/        # Site client (Tailwind) : village, commande par étapes, suivi, CGV
 │   ├── (payload)/         # Admin + API REST/GraphQL Payload (généré, ne pas modifier)
 │   └── api/stripe/webhook # Webhook Stripe
 ├── collections/           # Collections Payload (Users, Media, …)
-├── lib/stripe.ts          # Client Stripe serveur
+├── lib/                   # Règles métier pures (dates, prix, commandes…), testées unitairement
+├── services/              # Opérations Payload (commandes, paiement, passages, e-mails)
+├── components/storefront/ # Composants du site client
 ├── payload.config.ts
 └── payload-types.ts       # Généré (npm run generate:types)
 ```
