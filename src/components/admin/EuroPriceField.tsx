@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { centsToEuroInput, parseEurosToCents } from '@/lib/money'
 
 // Champ « prix » de l'admin : saisie en euros (« 2,50 »), valeur stockée en centimes.
-export const EuroPriceField: NumberFieldClientComponent = ({ field, path }) => {
+export const EuroPriceField: NumberFieldClientComponent = ({ field, path, readOnly }) => {
   const { value, setValue, showError } = useField<number | null>({ path })
   const [draft, setDraft] = useState<string | null>(null)
 
@@ -34,6 +34,7 @@ export const EuroPriceField: NumberFieldClientComponent = ({ field, path }) => {
       }}
       path={path}
       placeholder="0,00"
+      readOnly={readOnly || field.admin?.readOnly}
       required={field.required}
       showError={showError}
       value={text}

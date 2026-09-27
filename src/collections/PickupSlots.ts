@@ -84,6 +84,23 @@ export const PickupSlots: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        const { totalDocs } = await req.payload.count({
+          collection: 'orders',
+          where: { pickupSlot: { equals: id } },
+          req,
+        })
+        if (totalDocs > 0) {
+          throw new APIError(
+            'Ce passage a des commandes : décochez « Ouvert aux commandes » plutôt que de le supprimer.',
+            400,
+            undefined,
+            true,
+          )
+        }
+      },
+    ],
     beforeChange: [
       async ({ data, originalDoc, req }) => {
         const merged = { ...originalDoc, ...data }

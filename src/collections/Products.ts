@@ -1,3 +1,4 @@
+import { APIError } from 'payload'
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '@/access'
@@ -19,6 +20,26 @@ export const Products: CollectionConfig = {
     create: authenticated,
     update: authenticated,
     delete: authenticated,
+  },
+  hooks: {
+    beforeDelete: [
+      // Un produit déjà commandé reste en base pour l'historique : on le retire de la vente.
+      async ({ id, req }) => {
+        const { totalDocs } = await req.payload.count({
+          collection: 'orders',
+          where: { 'items.product': { equals: id } },
+          req,
+        })
+        if (totalDocs > 0) {
+          throw new APIError(
+            'Ce produit figure dans des commandes : décochez « En vente » plutôt que de le supprimer.',
+            400,
+            undefined,
+            true,
+          )
+        }
+      },
+    ],
   },
   fields: [
     {

@@ -12,6 +12,7 @@ import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
 import { Locations } from './collections/Locations'
 import { PickupSlots } from './collections/PickupSlots'
+import { Orders } from './collections/Orders'
 import { ShopSettings } from './globals/ShopSettings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [PickupSlots, Locations, Categories, Products, Media, Users],
+  collections: [Orders, PickupSlots, Locations, Categories, Products, Media, Users],
   globals: [ShopSettings],
   i18n: {
     supportedLanguages: { fr },

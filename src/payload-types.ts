@@ -67,6 +67,7 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    orders: Order;
     'pickup-slots': PickupSlot;
     locations: Location;
     categories: Category;
@@ -80,6 +81,7 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     'pickup-slots': PickupSlotsSelect<false> | PickupSlotsSelect<true>;
     locations: LocationsSelect<false> | LocationsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -128,6 +130,46 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  reference?: string | null;
+  /**
+   * Le passage à « Payée » est fait automatiquement à la confirmation du paiement Stripe. Seuls les changements de statut cohérents sont acceptés.
+   */
+  status: 'en_attente_paiement' | 'payee' | 'preparee' | 'retiree' | 'non_retiree' | 'annulee' | 'remboursee';
+  pickupSlot: number | PickupSlot;
+  customer: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  items: {
+    product?: (number | null) | Product;
+    productName: string;
+    unitPriceCents: number;
+    quantity: number;
+    lineTotalCents: number;
+    id?: string | null;
+  }[];
+  totalCents: number;
+  customerNote?: string | null;
+  /**
+   * Visible uniquement dans le back-office.
+   */
+  internalNote?: string | null;
+  expiresAt?: string | null;
+  paidAt?: string | null;
+  stripeCheckoutSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
+  termsAcceptedAt: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -330,6 +372,10 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
         relationTo: 'pickup-slots';
         value: number | PickupSlot;
       } | null)
@@ -394,6 +440,43 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  reference?: T;
+  status?: T;
+  pickupSlot?: T;
+  customer?:
+    | T
+    | {
+        firstName?: T;
+        lastName?: T;
+        email?: T;
+        phone?: T;
+      };
+  items?:
+    | T
+    | {
+        product?: T;
+        productName?: T;
+        unitPriceCents?: T;
+        quantity?: T;
+        lineTotalCents?: T;
+        id?: T;
+      };
+  totalCents?: T;
+  customerNote?: T;
+  internalNote?: T;
+  expiresAt?: T;
+  paidAt?: T;
+  stripeCheckoutSessionId?: T;
+  stripePaymentIntentId?: T;
+  termsAcceptedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
