@@ -26,7 +26,7 @@ export default async function ProductsStep({ params }: { params: Promise<{ slotI
   return (
     <>
       <Stepper current={2} />
-      <h1 className="mb-4 text-3xl font-bold">Vos produits</h1>
+      <h1 className="mb-4 text-3xl">Vos produits</h1>
       <SlotHeading
         locationName={slot.location.name}
         address={slot.location.address}

@@ -23,7 +23,7 @@ export default async function DetailsStep({ params }: { params: Promise<{ slotId
   return (
     <>
       <Stepper current={3} />
-      <h1 className="mb-4 text-3xl font-bold">Vos coordonnées</h1>
+      <h1 className="mb-4 text-3xl">Vos coordonnées</h1>
       <SlotHeading
         locationName={slot.location.name}
         address={slot.location.address}

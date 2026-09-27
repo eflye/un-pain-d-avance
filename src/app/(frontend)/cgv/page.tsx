@@ -17,7 +17,7 @@ export default async function TermsPage() {
 
   return (
     <>
-      <h1 className="mb-6 text-3xl font-bold">Conditions générales de vente</h1>
+      <h1 className="mb-6 text-3xl">Conditions générales de vente</h1>
       {settings.termsOfSale ? (
         <RichText
           data={settings.termsOfSale}

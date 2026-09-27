@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-27T12:00:00Z",
+  "title": "Design System: La Mie Deininge · Un pain d'avance",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Vert ferronnerie", "canonical": "#2f5a48", "tonalRamp": ["oklch(15% 0.04 163)", "oklch(25% 0.05 163)", "oklch(35% 0.055 163)", "oklch(42% 0.055 163)", "oklch(55% 0.06 163)", "oklch(70% 0.055 163)", "oklch(85% 0.035 163)", "oklch(95% 0.015 163)"] },
+      "accent-strong": { "role": "primary", "displayName": "Ferronnerie foncée", "canonical": "#234436", "tonalRamp": ["oklch(15% 0.04 163)", "oklch(25% 0.05 163)", "oklch(35% 0.05 163)", "oklch(45% 0.055 163)", "oklch(55% 0.06 163)", "oklch(70% 0.055 163)", "oklch(85% 0.035 163)", "oklch(95% 0.015 163)"] },
+      "accent-soft": { "role": "primary", "displayName": "Vert d'eau pâle", "canonical": "#e8f3ee", "tonalRamp": ["oklch(15% 0.02 165)", "oklch(25% 0.025 165)", "oklch(35% 0.03 165)", "oklch(45% 0.03 165)", "oklch(55% 0.03 165)", "oklch(70% 0.025 165)", "oklch(85% 0.02 165)", "oklch(95.5% 0.012 165)"] },
+      "shopfront": { "role": "secondary", "displayName": "Vert d'eau de la boiserie", "canonical": "#a9d4c4", "tonalRamp": ["oklch(15% 0.03 170)", "oklch(25% 0.04 170)", "oklch(35% 0.045 170)", "oklch(45% 0.05 170)", "oklch(55% 0.055 170)", "oklch(70% 0.055 170)", "oklch(84% 0.05 170)", "oklch(95% 0.02 170)"] },
+      "lettering": { "role": "secondary", "displayName": "Ardoise du lettrage", "canonical": "#3d4d58", "tonalRamp": ["oklch(15% 0.02 240)", "oklch(25% 0.025 240)", "oklch(35% 0.03 240)", "oklch(42% 0.03 240)", "oklch(55% 0.03 240)", "oklch(70% 0.025 240)", "oklch(85% 0.015 240)", "oklch(95% 0.007 240)"] },
+      "ink": { "role": "neutral", "displayName": "Encre", "canonical": "#1c1917", "tonalRamp": ["oklch(15% 0.006 56)", "oklch(22% 0.006 56)", "oklch(35% 0.008 56)", "oklch(45% 0.01 56)", "oklch(55% 0.01 56)", "oklch(70% 0.008 56)", "oklch(85% 0.005 56)", "oklch(95% 0.003 56)"] },
+      "muted": { "role": "neutral", "displayName": "Pierre", "canonical": "#57534e", "tonalRamp": ["oklch(15% 0.006 60)", "oklch(25% 0.008 60)", "oklch(35% 0.01 60)", "oklch(44% 0.01 60)", "oklch(55% 0.01 60)", "oklch(70% 0.008 60)", "oklch(85% 0.005 60)", "oklch(95% 0.003 60)"] },
+      "line": { "role": "neutral", "displayName": "Filet", "canonical": "#e2e0da", "tonalRamp": ["oklch(15% 0.006 90)", "oklch(25% 0.008 90)", "oklch(35% 0.008 90)", "oklch(45% 0.008 90)", "oklch(55% 0.008 90)", "oklch(70% 0.008 90)", "oklch(90% 0.008 90)", "oklch(96% 0.004 90)"] },
+      "control-border": { "role": "neutral", "displayName": "Bordure de contrôle", "canonical": "#78716c", "tonalRamp": ["oklch(15% 0.008 56)", "oklch(25% 0.01 56)", "oklch(35% 0.012 56)", "oklch(45% 0.013 56)", "oklch(55% 0.013 56)", "oklch(70% 0.01 56)", "oklch(85% 0.006 56)", "oklch(95% 0.003 56)"] },
+      "surface": { "role": "neutral", "displayName": "Fond froid", "canonical": "#f4f8f6", "tonalRamp": ["oklch(15% 0.006 165)", "oklch(25% 0.006 165)", "oklch(35% 0.006 165)", "oklch(45% 0.006 165)", "oklch(55% 0.006 165)", "oklch(70% 0.006 165)", "oklch(85% 0.006 165)", "oklch(97.5% 0.005 165)"] },
+      "card": { "role": "neutral", "displayName": "Blanc carte", "canonical": "#ffffff" },
+      "success": { "role": "status", "displayName": "Succès", "canonical": "#166534", "tonalRamp": ["oklch(15% 0.05 151)", "oklch(25% 0.08 151)", "oklch(35% 0.1 151)", "oklch(45% 0.11 151)", "oklch(55% 0.13 151)", "oklch(70% 0.13 151)", "oklch(85% 0.08 151)", "oklch(98% 0.02 151)"] },
+      "success-soft": { "role": "status", "displayName": "Succès pâle", "canonical": "#f0fdf4" },
+      "warning": { "role": "status", "displayName": "Avertissement", "canonical": "#92400e", "tonalRamp": ["oklch(15% 0.05 46)", "oklch(25% 0.08 46)", "oklch(35% 0.1 46)", "oklch(47% 0.13 46)", "oklch(55% 0.14 46)", "oklch(70% 0.13 60)", "oklch(85% 0.09 75)", "oklch(98.5% 0.025 95)"] },
+      "warning-soft": { "role": "status", "displayName": "Avertissement pâle", "canonical": "#fffbeb" },
+      "danger": { "role": "status", "displayName": "Danger", "canonical": "#b91c1c", "tonalRamp": ["oklch(15% 0.06 27)", "oklch(25% 0.1 27)", "oklch(35% 0.14 27)", "oklch(45% 0.17 27)", "oklch(50.5% 0.19 27)", "oklch(70% 0.14 22)", "oklch(85% 0.07 18)", "oklch(97% 0.014 17)"] },
+      "danger-soft": { "role": "status", "displayName": "Danger pâle", "canonical": "#fef2f2" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Titre de page", "purpose": "h1, Alegreya italique 500 en ardoise, un par page." },
+      "display-lg": { "displayName": "Titre de page large", "purpose": "h1 de l'accueil et de la page village à partir de 640 px." },
+      "tagline": { "displayName": "Devise", "purpose": "Devise sous le logo dans le bandeau." },
+      "headline": { "displayName": "Catégorie", "purpose": "Noms de catégories du catalogue." },
+      "title": { "displayName": "Titre de section", "purpose": "h2, légendes de formulaire, jour d'un passage, total, quantité." },
+      "title-sm": { "displayName": "Titre d'élément", "purpose": "Nom de produit, prix, nom de village, totaux de tableau." },
+      "body": { "displayName": "Texte courant", "purpose": "Tout le texte courant, 18 px minimum." },
+      "label": { "displayName": "Libellé", "purpose": "Libellés de champs, boutons, mentions d'état." },
+      "reference": { "displayName": "Référence", "purpose": "Référence de commande à présenter au retrait." }
+    },
+    "shadows": [
+      { "name": "sticky-bar", "value": "0 -4px 16px rgb(28 25 23 / 0.08)", "purpose": "Uniquement sous la barre récapitulative collée en bas d'écran." }
+    ],
+    "focus": [
+      { "name": "focus-ring", "value": "outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: 0.25rem", "purpose": "Tout élément focalisable." },
+      { "name": "focus-field", "value": "border-color: var(--color-accent); outline-offset: 1px", "purpose": "Champs de saisie : bordure ferronnerie et anneau rapproché." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Changement de fond et enfoncement de 1 px des boutons, 150 ms." },
+      { "name": "reduced-motion", "value": "transition-duration: 0.01ms; animation-duration: 0.01ms", "purpose": "Neutralise toute transition sous prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "40rem (640 px : les requêtes média ignorent la racine à 18 px)" }
+    ],
+    "base": { "rootFontSize": "112.5% (18 px)", "container": "max-w-2xl (42 rem)", "minTouchTarget": "3 rem (54 px) livré, 48 px exigé" }
+  },
+  "components": [
+    {
+      "name": "Bouton principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Action qui fait avancer le parcours, une par étape.",
+      "html": "<button class=\"ds-btn-primary\">Continuer <svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button> <button class=\"ds-btn-primary\" aria-disabled=\"true\">Continuer</button>",
+      "css": ".ds-btn-primary { display: inline-flex; min-height: 3.25rem; align-items: center; justify-content: center; gap: 0.5rem; border: 0; border-radius: 0.75rem; background: #2f5a48; padding: 0.75rem 1.5rem; font: 700 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: #fff; cursor: pointer; transition: background-color 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: #234436; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 3px solid #2f5a48; outline-offset: 3px; } .ds-btn-primary[aria-disabled='true'] { background: #e2e0da; color: #57534e; cursor: not-allowed; transform: none; }"
+    },
+    {
+      "name": "Bouton secondaire",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Retour en arrière dans le parcours.",
+      "html": "<button class=\"ds-btn-secondary\">Modifier mes produits</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; min-height: 3.25rem; align-items: center; justify-content: center; gap: 0.5rem; border-radius: 0.75rem; border: 2px solid #1c1917; background: #fff; padding: 0.75rem 1.5rem; font: 700 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: #1c1917; cursor: pointer; } .ds-btn-secondary:hover { background: #f4f8f6; } .ds-btn-secondary:focus-visible { outline: 3px solid #2f5a48; outline-offset: 3px; }"
+    },
+    {
+      "name": "Champ de saisie",
+      "kind": "input",
+      "refersTo": "field-input",
+      "description": "Champ libellé au-dessus, erreur en danger sous le champ.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-tel\">Téléphone</label><input class=\"ds-field-input\" id=\"ds-tel\" type=\"tel\" value=\"06 12 34 56\" aria-invalid=\"true\" aria-describedby=\"ds-tel-err\"><p class=\"ds-field-error\" id=\"ds-tel-err\">Indiquez un numéro de téléphone valide.</p></div>",
+      "css": ".ds-field { font: 400 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: #1c1917; } .ds-field-label { display: block; margin-bottom: 0.375rem; font-weight: 700; } .ds-field-input { width: 100%; min-height: 3.25rem; border-radius: 0.75rem; border: 2px solid #78716c; background: #fff; padding: 0.625rem 0.875rem; font: inherit; color: #1c1917; } .ds-field-input:focus-visible { border-color: #2f5a48; outline: 3px solid #2f5a48; outline-offset: 1px; } .ds-field-input[aria-invalid='true'] { border-color: #b91c1c; } .ds-field-error { margin-top: 0.375rem; font-weight: 700; color: #b91c1c; }"
+    },
+    {
+      "name": "Sélecteur de quantité",
+      "kind": "custom",
+      "refersTo": "quantity-button",
+      "description": "Boutons moins et plus de 54 px, quantité annoncée entre eux.",
+      "html": "<div class=\"ds-qty\" role=\"group\" aria-label=\"Quantité de Baguette tradition\"><button class=\"ds-qty-btn\" aria-label=\"Diminuer\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\"><path d=\"M5 12h14\"/></svg></button><output class=\"ds-qty-value\">1</output><button class=\"ds-qty-btn\" aria-label=\"Augmenter\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></button></div>",
+      "css": ".ds-qty { display: flex; align-items: center; gap: 0.5rem; font-family: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; } .ds-qty-btn { display: inline-flex; width: 3rem; height: 3rem; align-items: center; justify-content: center; border-radius: 0.75rem; border: 2px solid #1c1917; background: #fff; color: #1c1917; cursor: pointer; transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-qty-btn:active { transform: translateY(1px); } .ds-qty-btn:focus-visible { outline: 3px solid #2f5a48; outline-offset: 3px; } .ds-qty-btn:disabled { border-color: #e2e0da; color: #57534e; cursor: not-allowed; } .ds-qty-value { width: 2rem; text-align: center; font-size: 1.25rem; font-weight: 700; color: #1c1917; }"
+    },
+    {
+      "name": "Carte de passage",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Carte cliquable d'un passage : jour, créneau, date limite, bouton pleine largeur.",
+      "html": "<a class=\"ds-slot\" href=\"#\"><span class=\"ds-slot-day\">Samedi 3 octobre 2026</span><span class=\"ds-slot-time\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>De 9 h 30 à 10 h 15</span><span class=\"ds-slot-deadline\">Commandes jusqu'au vendredi 2 octobre à 18:00</span><span class=\"ds-slot-cta\">Commander pour ce passage</span></a>",
+      "css": ".ds-slot { display: block; border-radius: 1rem; border: 2px solid #e2e0da; background: #fff; padding: 1rem; color: #1c1917; text-decoration: none; font: 400 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; transition: border-color 150ms; } .ds-slot:hover { border-color: #2f5a48; } .ds-slot:focus-visible { outline: 3px solid #2f5a48; outline-offset: 3px; } .ds-slot-day { display: block; font-size: 1.25rem; font-weight: 700; } .ds-slot-time { margin-top: 0.25rem; display: flex; align-items: center; gap: 0.5rem; } .ds-slot-time svg { color: #2f5a48; flex-shrink: 0; } .ds-slot-deadline { margin-top: 0.25rem; display: block; color: #57534e; } .ds-slot-cta { margin-top: 1rem; display: flex; min-height: 3.25rem; align-items: center; justify-content: center; border-radius: 0.75rem; background: #2f5a48; padding: 0.75rem 1.5rem; font-weight: 700; color: #fff; } .ds-slot:hover .ds-slot-cta { background: #234436; }"
+    },
+    {
+      "name": "Message d'état",
+      "kind": "custom",
+      "refersTo": "notice-warning",
+      "description": "Icône et titre gras, jamais la couleur seule ; tons info, succès, avertissement, danger.",
+      "html": "<div class=\"ds-notice ds-notice-warning\" role=\"status\"><svg aria-hidden=\"true\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/></svg><div><p class=\"ds-notice-title\">Plus que 3 commandes possibles</p><div class=\"ds-notice-body\">Ce passage sera bientôt complet.</div></div></div>",
+      "css": ".ds-notice { display: flex; gap: 0.75rem; border-radius: 1rem; border: 1px solid; padding: 1rem; font: 400 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; } .ds-notice svg { margin-top: 0.125rem; flex-shrink: 0; } .ds-notice-title { margin: 0; font-weight: 700; } .ds-notice-body { margin-top: 0.25rem; color: #1c1917; } .ds-notice-warning { border-color: rgb(146 64 14 / 0.3); background: #fffbeb; color: #92400e; }"
+    },
+    {
+      "name": "Bandeau et étapes",
+      "kind": "nav",
+      "refersTo": "shop-header",
+      "description": "Bandeau vert d'eau filé de ferronnerie, puis barre d'étapes à quatre pilules.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-header-link\" href=\"#\"><span class=\"ds-header-logo\">LA MIE DEININGE</span><span class=\"ds-header-tagline\">Un pain d'avance · commandez, retirez au camion</span></a></header><nav class=\"ds-steps\" aria-label=\"Étapes de la commande : étape 2 sur 4\"><ol><li><span class=\"ds-step-bar ds-on\"></span></li><li aria-current=\"step\"><span class=\"ds-step-bar ds-on\"></span></li><li><span class=\"ds-step-bar\"></span></li><li><span class=\"ds-step-bar\"></span></li></ol><p class=\"ds-steps-count\">Étape 2 sur 4</p></nav>",
+      "css": ".ds-header { background: #a9d4c4; border-bottom: 4px solid #2f5a48; padding: 1rem; } .ds-header-link { display: inline-block; color: #3d4d58; text-decoration: none; } .ds-header-link:focus-visible { outline: 3px solid #2f5a48; outline-offset: 3px; } .ds-header-logo { display: block; font: 400 2rem/1.1 Georgia, serif; letter-spacing: 0.04em; } .ds-header-tagline { margin-top: 0.25rem; display: block; font: italic 500 1.125rem/1.5 Alegreya, ui-serif, Georgia, serif; } .ds-steps { padding: 1.5rem 1rem 0; font: 400 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; } .ds-steps ol { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.375rem; margin: 0; padding: 0; list-style: none; } .ds-step-bar { display: block; height: 0.5rem; border-radius: 9999px; background: #e2e0da; } .ds-step-bar.ds-on { background: #2f5a48; } .ds-steps-count { margin-top: 0.5rem; color: #57534e; }"
+    },
+    {
+      "name": "Barre récapitulative",
+      "kind": "custom",
+      "refersTo": "summary-bar",
+      "description": "Panier collé en bas d'écran : nombre d'articles, total, action de l'étape.",
+      "html": "<div class=\"ds-summary\"><p class=\"ds-summary-info\" aria-live=\"polite\"><svg aria-hidden=\"true\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m15 11-1 9\"/><path d=\"m19 11-4-7\"/><path d=\"M2 11h20\"/><path d=\"m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4\"/><path d=\"M4.5 15.5h15\"/><path d=\"m5 11 4-7\"/><path d=\"m9 11 1 9\"/></svg><span><span class=\"ds-summary-count\">2 articles</span><span class=\"ds-summary-total\">2,55 €</span></span></p><a class=\"ds-summary-cta\" href=\"#\">Continuer</a></div>",
+      "css": ".ds-summary { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1rem; border-top: 1px solid #e2e0da; background: rgb(255 255 255 / 0.95); box-shadow: 0 -4px 16px rgb(28 25 23 / 0.08); backdrop-filter: blur(4px); font: 400 18px/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: #1c1917; } .ds-summary-info { flex: 1; display: flex; align-items: center; gap: 0.5rem; margin: 0; } .ds-summary-info svg { color: #2f5a48; flex-shrink: 0; } .ds-summary-count { display: block; color: #57534e; } .ds-summary-total { display: block; font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; } .ds-summary-cta { display: inline-flex; min-height: 3.25rem; align-items: center; border-radius: 0.75rem; background: #2f5a48; padding: 0.75rem 1.5rem; font-weight: 700; color: #fff; text-decoration: none; } .ds-summary-cta:hover { background: #234436; } .ds-summary-cta:focus-visible { outline: 3px solid #2f5a48; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "La devanture au bout du doigt",
+    "overview": "Le site client est le standard soigné de la vente en ligne, habillé de la devanture de La Mie Deininge : la boiserie vert d'eau devient le bandeau d'en-tête, la ferronnerie vert sombre porte toutes les actions, la sélection et le focus, et le lettrage peint ardoise revient en italique calligraphique sur les titres de page. Tout le reste est neutre, froid et clair : un fond tiré du vert d'eau, des cartes blanches à filet, un texte presque noir.\n\nLa densité est volontairement basse. La racine est à 18 px (`font-size: 112.5%`), si bien que toute l'échelle Tailwind en `rem` grandit avec elle : textes, marges et cibles tactiles. Le public compte des personnes âgées qui commandent sur téléphone en plein jour ; la lisibilité et la clarté priment sur l'originalité. Une seule colonne de 42 rem au plus, des listes plutôt que des grilles de cartes à photos, un récapitulatif collé en bas d'écran plutôt qu'une pastille de panier.\n\nLe site doit être complet sans aucune photo produit ; une photo ajoutée plus tard s'insère en vignette carrée de 80 px à coins arrondis dans la ligne du produit, sans changer la mise en page.",
+    "keyCharacteristics": [
+      "Racine à 18 px, tout en `rem` ; cibles tactiles de 48 px au minimum (54 à 58,5 px livrés).",
+      "Un seul accent, le vert ferronnerie, pour agir, sélectionner et signaler le focus.",
+      "Titres de page en Alegreya italique ardoise ; tout le reste en Atkinson Hyperlegible Next.",
+      "Surfaces plates à filet ; une seule ombre, structurelle, sous la barre récapitulative collante.",
+      "Tout état est dit par un texte, doublé d'une icône quand il y a une icône, jamais par la couleur seule."
+    ],
+    "rules": [
+      { "name": "La règle de la ferronnerie", "body": "Le vert ferronnerie est la seule couleur qui dit « agissez ici » ou « c'est choisi ». Aucune autre teinte ne porte un bouton, une sélection ou le focus.", "section": "colors" },
+      { "name": "La règle du bandeau", "body": "Le vert d'eau de la boiserie ne quitte pas l'en-tête. Les surfaces de contenu restent blanches sur fond froid.", "section": "colors" },
+      { "name": "La règle du texte d'abord", "body": "Complet, épuisé, stock restant, dans le panier, étape terminée : chaque état est écrit en toutes lettres. La couleur et l'icône le renforcent, elles ne le remplacent jamais.", "section": "colors" },
+      { "name": "La règle des 18 px", "body": "Aucun texte sous 1 rem (18 px). Les chiffres (prix, totaux, quantités) sont en chiffres tabulaires.", "section": "typography" },
+      { "name": "La règle de l'enseigne", "body": "Alegreya italique est réservée aux titres de page et à la devise du bandeau. Jamais dans un bouton, une liste, un formulaire ou un paragraphe.", "section": "typography" },
+      { "name": "La règle du filet", "body": "Une surface se détache par un filet, pas par une ombre. L'ombre n'existe que là où du contenu passe réellement dessous.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do garder la racine à 18 px et exprimer tailles, marges et cibles en `rem`.",
+      "Do donner à toute cible tactile au moins 48 px (3 rem livrés au plus petit, 3,25 rem pour boutons et champs).",
+      "Do écrire chaque état en texte, avec l'icône Lucide correspondante masquée aux lecteurs d'écran (`aria-hidden`), et la couleur d'état en renfort.",
+      "Do laisser l'anneau de focus de 3 px en vert ferronnerie, décalé de 3 px, sur tout élément focalisable.",
+      "Do poser le contenu en cartes blanches à filet de 1 px et coins de 1 rem sur le fond froid.",
+      "Do vérifier chaque nouvelle paire texte-fond : 4,5:1 pour le texte, 3:1 pour les bordures de contrôle."
+    ],
+    "donts": [
+      "Don't utiliser le vert d'eau de la boiserie hors du bandeau, ni une autre couleur que le vert ferronnerie pour une action, une sélection ou le focus.",
+      "Don't porter une information par la couleur seule, ni par le seul filet gris (1,32:1).",
+      "Don't composer le catalogue en grille de cartes à photos ni afficher le panier en pastille : liste lisible et barre récapitulative en bas d'écran.",
+      "Don't ajouter d'ombre décorative ; la seule ombre est celle de la barre collante.",
+      "Don't employer Alegreya italique ailleurs que dans les titres de page et la devise du bandeau.",
+      "Don't reprendre le personnage de boulanger visible sur la photo de la devanture : c'est un autocollant d'annuaire, pas la marque."
+    ]
+  }
+}

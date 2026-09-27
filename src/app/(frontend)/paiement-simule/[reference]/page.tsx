@@ -42,7 +42,7 @@ export default async function SimulatedPaymentPage({ params, searchParams }: Pro
   return (
     <>
       <Stepper current={4} />
-      <h1 className="mb-6 text-3xl font-bold">Paiement</h1>
+      <h1 className="mb-6 text-3xl">Paiement</h1>
       <Notice tone="warning" title="Paiement de test : aucun argent n’est débité.">
         Cette page remplace le paiement par carte en attendant la mise en service de Stripe.
       </Notice>

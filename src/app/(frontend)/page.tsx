@@ -22,7 +22,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold sm:text-4xl">Commandez votre pain à l&apos;avance</h1>
+      <h1 className="text-3xl sm:text-4xl">Commandez votre pain à l&apos;avance</h1>
       <p className="mt-3 text-lg text-muted">
         Choisissez votre village, puis le passage du boulanger. Vous payez en ligne et récupérez
         votre commande sur place.

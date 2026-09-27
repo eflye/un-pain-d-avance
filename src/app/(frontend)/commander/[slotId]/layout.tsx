@@ -23,7 +23,7 @@ export default async function OrderLayout({
   if (!slot || slot.isFull) {
     return (
       <>
-        <h1 className="mb-6 text-3xl font-bold">Commande impossible</h1>
+        <h1 className="mb-6 text-3xl">Commande impossible</h1>
         <Notice
           tone="warning"
           title={slot ? 'Ce passage est complet.' : 'Ce passage n’est plus ouvert aux commandes.'}

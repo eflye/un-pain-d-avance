@@ -43,7 +43,7 @@ export default async function VillagePage({ params }: Props) {
   return (
     <>
       <Stepper current={1} />
-      <h1 className="text-3xl font-bold sm:text-4xl">{location.name}</h1>
+      <h1 className="text-3xl sm:text-4xl">{location.name}</h1>
       <p className="mt-2 flex items-start gap-2 text-lg">
         <MapPin aria-hidden="true" className="mt-1 size-5 shrink-0 text-accent" />
         <span>

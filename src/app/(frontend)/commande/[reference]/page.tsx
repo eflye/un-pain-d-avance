@@ -46,7 +46,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   return (
     <>
       {confirmed && <ClearStoredCart slotId={slot.id} />}
-      <h1 className="mb-6 text-3xl font-bold">
+      <h1 className="mb-6 text-3xl">
         {confirmed
           ? 'Commande confirmée'
           : order.status === 'en_attente_paiement'
