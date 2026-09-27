@@ -51,3 +51,8 @@ node_modules/
 
 # Claude Code (réglages locaux)
 .claude/settings.local.json
+
+# Impeccable : seuls les briefs de surface sont versionnés
+/.impeccable/review/
+/.impeccable/questions/
+/.impeccable/hook.cache.json

@@ -36,6 +36,9 @@ services:
       # ⚠️ Nom du service "postgres" (communication inter-conteneurs)
       DATABASE_URL: postgresql://painavance:painavance@postgres:5432/painavance
       NEXT_TELEMETRY_DISABLED: "1"
+      # E-mails de dev capturés par Mailpit (voir .env.example pour la production)
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
       # Hot reload fiable sur un volume monté depuis macOS
       WATCHPACK_POLLING: "true"
     ports:
@@ -43,6 +46,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mailpit:
+        condition: service_started
     volumes:
       - .:/app
       - app_node_modules:/app/node_modules
@@ -50,6 +55,15 @@ services:
     networks:
       - painavance-network
     command: sh -c "apk add --no-cache libc6-compat && npm install && npm run dev"
+
+  # Capture les e-mails envoyés en développement : interface sur http://localhost:8026
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    container_name: painavance-mailpit
+    ports:
+      - "8026:8025" # 8025 souvent pris par un autre projet
+    networks:
+      - painavance-network
 
   # Relaie les webhooks Stripe (mode test) vers l'app : podman compose --profile stripe up -d
   # Le secret de signature s'affiche dans : podman compose logs stripe → copier dans STRIPE_WEBHOOK_SECRET
@@ -65,7 +79,30 @@ services:
     networks:
       - painavance-network
 
+  # Tests de bout en bout (Chromium) : podman compose --profile e2e run --rm e2e
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.58.2-noble
+    container_name: painavance-e2e
+    profiles: ["e2e"]
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://painavance:painavance@postgres:5432/painavance
+      E2E_BASE_URL: http://app:3000
+      NEXT_TELEMETRY_DISABLED: "1"
+    depends_on:
+      - app
+    volumes:
+      - .:/app
+      # node_modules propre à ce container (glibc), distinct de celui de l'app (Alpine/musl)
+      - e2e_node_modules:/app/node_modules
+    networks:
+      - painavance-network
+    command: sh -c "npm install --no-audit --no-fund --loglevel=error && npx playwright test"
+
 volumes:
+  e2e_node_modules:
   postgres_data:
   app_node_modules:
   app_next:
