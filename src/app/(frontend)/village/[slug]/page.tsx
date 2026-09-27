@@ -94,9 +94,15 @@ export default async function VillagePage({ params }: Props) {
                     className="group block rounded-2xl border-2 border-line bg-white p-4 text-ink no-underline transition-colors hover:border-accent"
                   >
                     {content}
-                    <span className="btn-primary mt-4 w-full whitespace-nowrap group-hover:bg-accent-strong">
-                      Commander pour ce passage
-                      <ChevronRight aria-hidden="true" className="size-5" />
+                    <span className="btn-primary mt-4 w-full text-center text-balance group-hover:bg-accent-strong">
+                      {/* Libellé et chevron dans le même flux : passage à la ligne propre si le texte est agrandi. */}
+                      <span>
+                        Commander pour ce passage
+                        <ChevronRight
+                          aria-hidden="true"
+                          className="ml-1 inline size-5 align-[-0.2em]"
+                        />
+                      </span>
                     </span>
                   </Link>
                 )}

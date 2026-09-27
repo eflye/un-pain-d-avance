@@ -18,6 +18,10 @@ test('captures du parcours', async ({ page }, testInfo) => {
   await page.goto('/village/montgeroult')
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   await shot('village')
+  // Texte agrandi à 200 % (WCAG 1.4.4) : aucun débordement attendu.
+  const zoom = await page.addStyleTag({ content: 'html { font-size: 225% !important; }' })
+  await shot('village-texte-200')
+  await zoom.evaluate((el) => (el as HTMLStyleElement).remove())
   await page
     .getByRole('link', { name: /Commander pour ce passage/ })
     .first()
