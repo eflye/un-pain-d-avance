@@ -120,6 +120,15 @@ describe('Prestataire de paiement', () => {
     expect(isSimulatedPaymentEnabled()).toBe(false)
   })
 
+  it('accepte le paiement simulé en production seulement sur un serveur de test déclaré', () => {
+    vi.stubEnv('PAYMENT_PROVIDER', 'simulated')
+    vi.stubEnv('NODE_ENV', 'production')
+    vi.stubEnv('ALLOW_SIMULATED_PAYMENT_IN_PRODUCTION', 'true')
+    expect(getPaymentProvider()).toBe('simulated')
+    vi.stubEnv('ALLOW_SIMULATED_PAYMENT_IN_PRODUCTION', '1')
+    expect(() => getPaymentProvider()).toThrow()
+  })
+
   it('redirige vers la page de paiement simulé en développement', async () => {
     vi.stubEnv('PAYMENT_PROVIDER', 'simulated')
     vi.stubEnv('NODE_ENV', 'development')

@@ -130,7 +130,8 @@ test.describe('Parcours client', () => {
     })
     const response = await page.goto(`/commande/${order.reference}?cle=devinette`)
     expect(response?.status()).toBe(404)
-    await expect(page.getByText(testCustomer.lastName)).toHaveCount(0)
+    await expect(page.getByText(testCustomer.email)).toHaveCount(0)
+    await expect(page.getByText(testCustomer.phone)).toHaveCount(0)
   })
 
   test('l’accueil liste les villages et reste accessible', async ({ page }) => {
