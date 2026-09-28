@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 
 import config from '@/payload.config'
+import { isSimulatedPaymentEnabled } from '@/services/payments'
 import { getShopSettings } from '@/services/storefront'
 
 import logo from '../../../public/brand/logo-ardoise.png'
@@ -27,6 +28,9 @@ const alegreya = Alegreya({
   display: 'swap',
 })
 
+// Toutes les pages lisent la base (réglages boutique) : rendu à la requête, jamais au build.
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: {
     default: "La Mie Deininge · Un pain d'avance",
@@ -47,6 +51,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           Aller au contenu
         </a>
+        {isSimulatedPaymentEnabled() && (
+          <p className="bg-warning px-4 py-2 text-center font-bold text-white">
+            Site de test : aucun paiement réel n&apos;est effectué.
+          </p>
+        )}
         <header className="border-b-4 border-accent bg-shopfront">
           <div className="mx-auto max-w-2xl px-4 py-4">
             <Link href="/" className="inline-block text-lettering no-underline">

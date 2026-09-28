@@ -6,7 +6,8 @@ import { orderPath } from '@/lib/order-access'
 import type { Order } from '@/payload-types'
 
 function serverUrl(): string {
-  return (process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000').replace(/\/$/, '')
+  // Lue à l'exécution (pas de NEXT_PUBLIC_ : ce serait figé dans l'image au build).
+  return (process.env.SERVER_URL ?? 'http://localhost:3000').replace(/\/$/, '')
 }
 
 /**

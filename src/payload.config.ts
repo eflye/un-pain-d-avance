@@ -15,6 +15,7 @@ import { Locations } from './collections/Locations'
 import { PickupSlots } from './collections/PickupSlots'
 import { Orders } from './collections/Orders'
 import { ShopSettings } from './globals/ShopSettings'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -41,6 +42,10 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    // En production (NODE_ENV=production), les migrations sont appliquées au démarrage.
+    // En dev, Payload pousse le schéma directement : créer une migration à chaque changement
+    // de schéma destiné à être déployé (npm run payload migrate:create <nom>).
+    prodMigrations: migrations,
   }),
   // SMTP si configuré (Mailpit en dev, prestataire en production) ; sinon e-mails écrits dans les logs.
   email: process.env.SMTP_HOST

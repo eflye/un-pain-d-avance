@@ -1,0 +1,22 @@
+# Contexte de build de l'image de production : le strict nécessaire
+.git
+.github
+node_modules
+.next
+media
+.env
+.env.*
+!.env.example
+test-results
+playwright-report
+blob-report
+.impeccable
+.claude
+.vscode
+docs
+deploy
+tests
+coverage
+*.log
+Dockerfile*
+docker-compose*.yml

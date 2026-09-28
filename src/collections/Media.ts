@@ -14,5 +14,6 @@ export const Media: CollectionConfig = {
       required: true,
     },
   ],
-  upload: true,
+  // MEDIA_DIR (production) : dossier persistant monté en volume ; sinon dossier par défaut de Payload.
+  upload: process.env.MEDIA_DIR ? { staticDir: process.env.MEDIA_DIR } : true,
 }
