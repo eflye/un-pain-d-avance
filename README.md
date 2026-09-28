@@ -76,8 +76,10 @@ src/
 
 ## 🚢 Production
 
-`Dockerfile.production` construit une image Next.js standalone :
-
-```bash
-podman build -f Dockerfile.production -t un-pain-d-avance .
-```
+- **Image Docker** : publiée sur `ghcr.io/eflye/un-pain-d-avance` à chaque release GitHub
+  (`gh release create vX.Y.Z --generate-notes`), après typecheck, lint et tests d'intégration.
+  Build local : `podman build -f Dockerfile.production -t un-pain-d-avance .`
+- **Déploiement serveur** : voir [deploy/README.md](deploy/README.md) (Postgres + app derrière ton reverse proxy).
+- **Migrations** : appliquées automatiquement au démarrage en production. Tout changement de schéma
+  livré s'accompagne d'une migration : `podman compose exec app npx payload migrate:create <nom>`.
+- **Santé** : `GET /api/health` → `{"status":"ok"}` (app démarrée et base joignable).

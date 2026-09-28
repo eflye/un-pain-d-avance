@@ -1,6 +1,6 @@
 {
   "name": "un-pain-d-avance",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Précommande de boulangerie avec choix du jour de livraison et paiement Stripe",
   "type": "module",
   "scripts": {

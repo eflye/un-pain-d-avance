@@ -60,9 +60,10 @@ Pour toute fonctionnalité qui touche aux données :
   `feat(commandes): refuser une commande après la date limite du passage`
   Types : `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `a11y`.
 
-### 3.4 Versions
-- Versionnement sémantique (`vX.Y.Z`) via des tags git.
-- Mets à jour `version` dans `package.json` quand la tâche le demande.
+### 3.4 Versions et releases
+- Versionnement sémantique (`vX.Y.Z`) via des tags git ; `version` de `package.json` alignée sur le tag.
+- Une release GitHub publiée (`gh release create vX.Y.Z --generate-notes`) déclenche les vérifications puis la publication de l'image `ghcr.io/eflye/un-pain-d-avance:X.Y.Z` (`.github/workflows/release.yml`).
+- Déploiement serveur : `deploy/` (compose, `.env.example`, mode d'emploi).
 
 ---
 
@@ -82,7 +83,7 @@ Pour toute fonctionnalité qui touche aux données :
 - La date d'un passage est une **date civile** (`Europe/Paris`), stockée à midi UTC : pas de conversion de fuseau implicite qui pourrait décaler le jour. Créneaux en `HH:mm`. Horodatages techniques en UTC, affichés en `Europe/Paris`.
 - Règles d'accès (`access`) explicites sur chaque collection : lecture publique limitée aux produits actifs, lieux actifs et passages ouverts ; commandes accessibles au seul back-office.
 - Opérations multi-documents (commande + décrément de stock) dans une **transaction** (`req` transmis à l'API locale).
-- Avant la mise en production : passage aux migrations (`npm run payload migrate:create`).
+- **Migrations** : en dev, Payload pousse le schéma ; en production, les migrations de `src/migrations/` s'appliquent au démarrage. Tout changement de schéma livré s'accompagne d'une migration : `podman compose exec app npx payload migrate:create <nom>`, committée avec le changement.
 
 ### 4.3 Next.js / TypeScript
 - TypeScript strict ; pas de `any` sans justification.
@@ -97,7 +98,7 @@ Pour toute fonctionnalité qui touche aux données :
 - Métadonnées de la Checkout Session : identifiant de commande, pour rattacher le webhook à la commande.
 - Signature de chaque webhook vérifiée (`STRIPE_WEBHOOK_SECRET`) ; en local, relais par la Stripe CLI (`podman compose --profile stripe up -d`).
 - Toute confirmation de paiement passe par `confirmOrderPayment` (`src/services/orders.ts`), quel que soit le prestataire.
-- Sans clés Stripe, `PAYMENT_PROVIDER=simulated` remplace Stripe par une page de test locale (`/paiement-simule/…`). **Jamais en production** (refusé par le code).
+- Sans clés Stripe, `PAYMENT_PROVIDER=simulated` remplace Stripe par une page de test locale (`/paiement-simule/…`). Refusé en production, **sauf serveur de test déclaré** par `ALLOW_SIMULATED_PAYMENT_IN_PRODUCTION=true` (le site affiche alors un bandeau « Site de test »). Jamais sur le site réel.
 
 ### 4.5 Front-end
 - Site client dans `src/app/(frontend)/`, stylé en Tailwind CSS 4. Interface et contenus en français.

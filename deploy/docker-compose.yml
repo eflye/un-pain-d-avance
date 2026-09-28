@@ -1,0 +1,57 @@
+# ============================================
+# Déploiement serveur - Un pain d'avance
+# ============================================
+# Mode d'emploi : deploy/README.md
+#   cp .env.example .env   # puis renseigner les valeurs
+#   docker compose up -d   # (ou podman compose up -d)
+#
+# L'app n'écoute que sur 127.0.0.1:3000 par défaut : le reverse proxy existant
+# (nginx, Traefik, Caddy…) relaie le trafic HTTPS vers ce port.
+
+name: un-pain-d-avance
+
+services:
+  postgres:
+    image: docker.io/library/postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-painavance}
+      POSTGRES_USER: ${POSTGRES_USER:-painavance}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD manquant dans .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    # Version publiée à chaque release GitHub (ex. 0.1.0) ; « latest » = dernière release.
+    image: ghcr.io/eflye/un-pain-d-avance:${APP_VERSION:-latest}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-painavance}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-painavance}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-3000}:3000"
+    volumes:
+      - media:/app/media
+    # Si le reverse proxy tourne lui-même en container (Traefik, Nginx Proxy Manager…),
+    # décommenter pour rejoindre son réseau et le laisser joindre « app:3000 » :
+    # networks:
+    #   - default
+    #   - proxy
+
+volumes:
+  postgres_data:
+  media:
+
+# networks:
+#   proxy:
+#     external: true
+#     name: <nom du réseau de ton proxy>

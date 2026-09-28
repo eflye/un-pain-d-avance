@@ -1,0 +1,45 @@
+name: CI
+
+# Vérifie chaque push et pull request ; réutilisé par le workflow de release avant la publication de l'image.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  verifications:
+    name: Typecheck, lint et tests d'intégration
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: painavance
+          POSTGRES_USER: painavance
+          POSTGRES_PASSWORD: painavance
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U painavance -d painavance"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://painavance:painavance@localhost:5432/painavance
+      PAYLOAD_SECRET: ci-only-secret-not-used-anywhere-else
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Lint
+        run: npm run lint
+      - name: Tests d'intégration
+        run: npm run test:int
