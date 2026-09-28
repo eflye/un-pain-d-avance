@@ -161,7 +161,7 @@ podman compose --profile stripe up -d
 podman compose logs stripe            # récupérer le whsec_… pour STRIPE_WEBHOOK_SECRET
 
 # Qualité
-podman compose exec app npx tsc --noEmit
+podman compose exec app npm run typecheck
 podman compose exec app npm run lint
 
 # Données de démonstration (catalogue, 2 villages, passages des 4 prochaines semaines)

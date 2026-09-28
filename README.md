@@ -50,7 +50,7 @@ Toutes les commandes s'exécutent dans le container `app` :
 
 ```bash
 podman compose exec app npm run lint
-podman compose exec app npx tsc --noEmit
+podman compose exec app npm run typecheck
 podman compose exec app npm run test:int
 podman compose --profile e2e run --rm e2e       # tests de bout en bout (Playwright + axe)
 podman compose exec app npm run generate:types      # après modification d'une collection

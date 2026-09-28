@@ -38,7 +38,8 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Typecheck
-        run: npx tsc --noEmit
+        # next typegen génère next-env.d.ts (types des imports d'images, routes), absent d'un clone neuf
+        run: npm run typecheck
       - name: Lint
         run: npm run lint
       - name: Tests d'intégration
