@@ -63,7 +63,7 @@ Pour toute fonctionnalité qui touche aux données :
 ### 3.4 Versions et releases
 - Versionnement sémantique (`vX.Y.Z`) via des tags git ; `version` de `package.json` alignée sur le tag.
 - Une release GitHub publiée (`gh release create vX.Y.Z --generate-notes`) déclenche les vérifications puis la publication de l'image `ghcr.io/eflye/un-pain-d-avance:X.Y.Z` (`.github/workflows/release.yml`).
-- Déploiement serveur : `deploy/` (compose, `.env.example`, mode d'emploi).
+- Déploiement serveur : `deploy/` (compose, `.env.example`) ; guide complet : `docs/INSTALLATION.md`, à tenir à jour avec toute nouvelle variable ou étape d'installation.
 
 ---
 

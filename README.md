@@ -1,6 +1,8 @@
 # Un pain d'avance
 
-Précommande de boulangerie en ligne : les clients choisissent leurs produits et un jour de livraison, puis paient via Stripe. Un back-office permet de gérer les produits en vente et les jours de livraison ouverts.
+Précommande en ligne pour la boulangerie-pâtisserie **La Mie Deininge**, en tournée dans des villages sans boulangerie : le client choisit un passage du camion (lieu, date, créneau), compose sa commande, paie en ligne et la retire sur place. Un back-office gère les produits, les lieux, les passages et les commandes.
+
+📘 **Installation (poste de développement et serveur) : [docs/INSTALLATION.md](docs/INSTALLATION.md)**
 
 ## 🏗️ Stack
 
@@ -32,7 +34,8 @@ podman compose exec app npm run seed:demo
 ### Paiement sans clés Stripe
 
 Avec `PAYMENT_PROVIDER=simulated` dans `.env`, le paiement Stripe est remplacé par une page de test
-locale (« Simuler un paiement réussi / un abandon »). Refusé en production.
+locale (« Simuler un paiement réussi / un abandon »). Refusé en production, sauf serveur de test
+déclaré par `ALLOW_SIMULATED_PAYMENT_IN_PRODUCTION=true` (bandeau « Site de test » affiché).
 
 ### Stripe (mode test)
 
@@ -79,7 +82,7 @@ src/
 - **Image Docker** : publiée sur `ghcr.io/eflye/un-pain-d-avance` à chaque release GitHub
   (`gh release create vX.Y.Z --generate-notes`), après typecheck, lint et tests d'intégration.
   Build local : `podman build -f Dockerfile.production -t un-pain-d-avance .`
-- **Déploiement serveur** : voir [deploy/README.md](deploy/README.md) (Postgres + app derrière ton reverse proxy).
+- **Déploiement serveur** : voir [docs/INSTALLATION.md](docs/INSTALLATION.md#3-serveur-test-ou-production) (Postgres + app derrière ton reverse proxy).
 - **Migrations** : appliquées automatiquement au démarrage en production. Tout changement de schéma
   livré s'accompagne d'une migration : `podman compose exec app npx payload migrate:create <nom>`.
 - **Santé** : `GET /api/health` → `{"status":"ok"}` (app démarrée et base joignable).
