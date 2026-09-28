@@ -1,6 +1,6 @@
 import type Stripe from 'stripe'
 
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 
 // Source de vérité du paiement : une commande n'est confirmée qu'à réception de ce webhook,
 // jamais sur la page de retour de Stripe Checkout.
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       await request.text(),
       signature,
       process.env.STRIPE_WEBHOOK_SECRET || '',
